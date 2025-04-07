@@ -64,7 +64,7 @@ nav a:first-of-type {
     margin-left: -1rem;
     font-size: 1rem;
 
-    padding: 2rem 0;
+    padding: 1rem 0;
     margin-top: 1rem;
   }
 }
