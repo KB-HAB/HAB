@@ -94,7 +94,7 @@ const value6 = ref('')
 }
 
 .demo-date-picker .container {
-  flex: 1;
+  flex: 2;
   border-right: solid 1px var(--el-border-color);
 }
 
