@@ -22,7 +22,7 @@
       />
       <p
         :style="{
-          color: transaction.type === '수입' ? '#22c55e' : '#000000',
+          color: transaction.type === '수입' ? '#6AA25A' : '#000000',
           fontSize: '16px',
           fontWeight: '600',
         }"
