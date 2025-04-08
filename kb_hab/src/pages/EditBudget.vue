@@ -14,7 +14,7 @@
             v-model="displayBudget"
             @input="onBudgetInput"
             placeholder="예: 500,000"
-            class="text-right font-medium"
+            class="text-left font-medium"
         />
       </div>
 
