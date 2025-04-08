@@ -1,41 +1,34 @@
 <template>
   <div
-    style="
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #efefef;
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      border: 1px solid #e5e7eb;
-    "
+    class="flex justify-between items-center bg-[#efefef] p-5 rounded-xl shadow-sm border border-gray-200 cursor-pointer"
+    @click="handleClick"
   >
-    <div>
-      <p style="font-size: 14px; color: #9ca3af">{{ formatDate(transaction.date) }}</p>
-      <p style="font-size: 16px; font-weight: 500">{{ transaction.title }}</p>
+    <div class="flex flex-col justify-between">
+      <div class="text-sm text-gray-400 mb-1.5 pl-1">
+        {{ formatDate(transaction.date) }}
+      </div>
+      <div class="text-base font-medium pl-1">
+        {{ transaction.title }}
+      </div>
     </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
-      <component
-        :is="getCategoryIcon(transaction.category)"
-        style="width: 20px; height: 20px; color: #6b7280"
-      />
-      <p
-        :style="{
-          color: transaction.type === '수입' ? '#6AA25A' : '#000000',
-          fontSize: '16px',
-          fontWeight: '600',
-        }"
+
+    <div class="flex flex-col items-end gap-2 pt-1 pr-1">
+      <component :is="getCategoryIcon(transaction.category)" class="w-5 h-5 text-gray-500" />
+      <div
+        :class="[
+          'text-base font-semibold',
+          transaction.type === '수입' ? 'text-[#6AA25A]' : 'text-black',
+        ]"
       >
         {{ transaction.type === '수입' ? '+' : '-' }}
         {{ Number(transaction.amount).toLocaleString() }} 원
-      </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 import {
   Utensils,
   Coffee,
@@ -64,9 +57,15 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['click'])
+
+const handleClick = () => {
+  emit('click', props.transaction.id)
+}
+
 const formatDate = (dateStr) => {
   const [year, month, day] = dateStr.split('-')
-  return `${Number(month)}.${Number(day)}`
+  return `${month.padStart(2, '0')}.${day.padStart(2, '0')}`
 }
 
 const getCategoryIcon = (category) => {
@@ -92,5 +91,3 @@ const getCategoryIcon = (category) => {
   return map[category] || HelpCircle
 }
 </script>
-
-<style scoped></style>
