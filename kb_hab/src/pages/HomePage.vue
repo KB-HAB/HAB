@@ -29,6 +29,18 @@
     </div>
 
     <!-- 수입 / 지출 요약 -->
+
+    <!-- 최근 거래내역 -->
+    <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
+      <div class="flex justify-between items-center mb-2" @click="handleTransaction">
+        <h3 class="text-base font-bold flex items-center">
+          최근 거래
+          <ChevronRight class="w-4 h-4 text-gray-500 ml-1 cursor-pointer" />
+        </h3>
+      </div>
+
+      <TransactionItemList :transactions="previewTransactions" @click="goToDetail" />
+    </div>
     <!-- <NavBar /> -->
   </div>
 </template>
@@ -38,13 +50,23 @@ import { ref, computed } from 'vue'
 import { Pencil } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import HomeCard from '@/components/home/HomeCard.vue'
+import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
+import { dummyTransactions } from '@/data/transactions.js'
+import { ChevronRight } from 'lucide-vue-next'
 
 const router = useRouter()
 const handleEditBudget = () => {
   router.push('/setting/budget')
 }
+const handleTransaction = () => {
+  router.push('/transactions')
+}
+const goToDetail = (id) => {
+  router.push(`/transactions/${id}`)
+}
 
 const dailyAmount = ref()
 const weeklyAmount = ref()
 const remainingAmount = ref()
+const previewTransactions = computed(() => dummyTransactions.value.slice(0, 4))
 </script>
