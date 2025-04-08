@@ -1,12 +1,11 @@
 <template>
   <!-- <Header /> -->
-  <div class="p-4 space-y-6">
+  <div class="p-4 space-y-2">
     <!-- 하루 쓸 수 있는 돈 -->
-    <div>
+    <div class="h-[102px]">
       <HomeCard
-        title="이대로 가면 하루에 쓸 수 있는 돈"
-        :amount="weeklyAmount"
-        bg-color="bg-green-500"
+        title="이대로 가면 <strong>하루</strong>에 쓸 수 있는 돈"
+        bgColor="bg-[#6AA25A]"
         textColor="text-white"
       />
     </div>
@@ -16,49 +15,36 @@
       <HomeCard
         title="일주일"
         :amount="weeklyAmount"
-        bgColor="bg-gray-800"
+        bgColor="bg-[#4B4B4B]"
         textColor="text-white"
       />
       <!-- 남은 돈 -->
       <HomeCard
-        title="남은 돈 "
+        title="남은 돈"
         :amount="remainingAmount"
-        bgColor="bg-gray-100"
+        bgColor="bg-[#F8F8F8]"
         textColor="text-black"
+        :iconButton="{ icon: Pencil, onClick: handleEditBudget }"
       />
     </div>
+
+    <!-- 수입 / 지출 요약 -->
+    <!-- <NavBar /> -->
   </div>
-  <!-- <NavBar /> -->
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Pencil } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
 import HomeCard from '@/components/home/HomeCard.vue'
 
-const dailyAmount = ref(5789)
-const weeklyAmount = ref(40523)
-const remainingAmount = ref(247932)
-
-const income = ref(10000)
-const expense = ref(10000)
-const netIncome = computed(() => income.value - expense.value)
-
-const currentDate = ref(new Date())
-const formattedMonth = computed(() => {
-  const year = currentDate.value.getFullYear()
-  const month = String(currentDate.value.getMonth() + 1).padStart(2, '0')
-  return `${year}.${month}월`
-})
-
-const prevMonth = () => {
-  const date = new Date(currentDate.value)
-  date.setMonth(date.getMonth() - 1)
-  currentDate.value = date
+const router = useRouter()
+const handleEditBudget = () => {
+  router.push('/setting/budget')
 }
 
-const nextMonth = () => {
-  const date = new Date(currentDate.value)
-  date.setMonth(date.getMonth() + 1)
-  currentDate.value = date
-}
+const dailyAmount = ref()
+const weeklyAmount = ref()
+const remainingAmount = ref()
 </script>

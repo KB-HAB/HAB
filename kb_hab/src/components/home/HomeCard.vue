@@ -1,12 +1,22 @@
 <template>
-  <!-- Header  -->
-  <div class="rounded-xl shadow-md p-4 w-full flex-1 h-[98px]" :class="[bgColor, textColor]">
+  <div
+    class="rounded-xl shadow-md p-4 w-full flex-1 h-[98px] relative"
+    :class="[bgColor, textColor]"
+  >
+    <!-- 아이콘 버튼의 위치를 더 안쪽으로 이동 -->
+    <button
+      v-if="iconButton"
+      class="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
+      @click="iconButton.onClick"
+    >
+      <component :is="iconButton.icon" class="w-5 h-5" />
+    </button>
+
     <div class="flex flex-col justify-between h-full">
-      <span class="text-left self-start text-sm">{{ title }}</span>
+      <span class="text-left self-start text-sm" v-html="title"></span>
       <span class="text-lg font-semibold self-end">{{ formattedAmount }} 원</span>
     </div>
   </div>
-  <!-- NavBar -->
 </template>
 
 <script setup>
