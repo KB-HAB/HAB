@@ -32,7 +32,7 @@
 
     <!-- 최근 거래내역 -->
     <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
-      <div class="flex justify-between items-center mb-2" @click="handleTransaction">
+      <div class="flex justify-between items-center mb-2" @click="gotoHistory">
         <h3 class="text-base font-bold flex items-center">
           최근 거래
           <ChevronRight class="w-4 h-4 text-gray-500 ml-1 cursor-pointer" />
@@ -58,7 +58,7 @@ const router = useRouter()
 const handleEditBudget = () => {
   router.push('/setting/budget')
 }
-const handleTransaction = () => {
+const gotoHistory = () => {
   router.push('/transactions')
 }
 const goToDetail = (id) => {
