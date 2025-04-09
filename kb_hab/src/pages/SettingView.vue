@@ -11,7 +11,7 @@
           <!-- Title(닉네임) -->
           <p class="text-xl font-bold">닉네임</p>
           <!-- IconButton(연필) -->
-          <button class="text-gray-500 text-sm">
+          <button class="text-gray-500 text-sm" :onClick="editNickname">
             <Pencil />
           </button>
         </div>
@@ -83,6 +83,10 @@ const handleDelete = () => {
 }
 
 import { Pencil, Trash2, HandCoins, House } from 'lucide-vue-next'
+
+const editNickname = () => {
+  router.push({ name: 'editProfile' })
+}
 
 const goToBudget = () => {
   router.push({ name: 'editBudget' })
