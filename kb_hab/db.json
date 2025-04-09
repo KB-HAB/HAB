@@ -1,0 +1,52 @@
+{
+  "user": [
+    {
+      "id": "1",
+      "nickname": "홍길동",
+      "email": "hong@test.com"
+    }
+  ],
+  "category": [
+    {
+      "id": "1",
+      "name": "식비"
+    },
+    {
+      "id": "2",
+      "name": "교통비"
+    },
+    {
+      "id": "3",
+      "name": "월급"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "title": "점심 식사",
+      "memo": "회사 근처 식당",
+      "amount": 8000,
+      "date": "2023-04-09",
+      "type": "EXPENDITURE",
+      "category_id": 1
+    },
+    {
+      "id": "2",
+      "title": "버스비",
+      "memo": "대중교통 이용",
+      "amount": 1200,
+      "date": "2023-04-10",
+      "type": "EXPENDITURE",
+      "category_id": 2
+    },
+    {
+      "id": "3",
+      "title": "월급",
+      "memo": "4월 급여",
+      "amount": 2000000,
+      "date": "2023-04-05",
+      "type": "INCOME",
+      "category_id": 3
+    }
+  ]
+}
