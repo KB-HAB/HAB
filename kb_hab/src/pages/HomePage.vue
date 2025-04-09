@@ -1,7 +1,7 @@
 <template>
-  <!-- <Header /> -->
+  <HeaderLayout />
   <div class="p-4 space-y-2">
-    <!-- 하루 쓸 수 있는 돈 -->
+    <!-- 하루 쓸수 있는 돈 -->
     <div class="h-[102px]">
       <HomeCard
         title="이대로 가면 <strong>하루</strong>에 쓸 수 있는 돈"
@@ -10,6 +10,7 @@
       />
     </div>
 
+    <!-- 일주일/남은돈 -->
     <div class="flex gap-3">
       <!-- 일주일 -->
       <HomeCard
@@ -29,6 +30,9 @@
     </div>
 
     <!-- 수입 / 지출 요약 -->
+    <div class="w-full">
+      <MonthlyCard :income="300000" :expenditure="180000" />
+    </div>
 
     <!-- 최근 거래내역 -->
     <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
@@ -41,8 +45,8 @@
 
       <TransactionItemList :transactions="previewTransactions" @click="goToDetail" />
     </div>
-    <!-- <NavBar /> -->
   </div>
+  <NavBar />
 </template>
 
 <script setup>
@@ -51,8 +55,11 @@ import { Pencil } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import HomeCard from '@/components/home/HomeCard.vue'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
+import MonthlyCard from '@/components/home/MonthlyCard.vue'
 import { dummyTransactions } from '@/data/transactions.js'
 import { ChevronRight } from 'lucide-vue-next'
+import HeaderLayout from '@/components/layout/HeaderLayout.vue'
+import NavBar from '@/components/layout/NavBar.vue'
 
 const router = useRouter()
 const handleEditBudget = () => {

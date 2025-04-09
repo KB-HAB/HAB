@@ -40,7 +40,15 @@ const props = defineProps({
     default: 'text-black',
   },
   iconButton: {},
+  type: {
+    type: String,
+    default: '', // 'income' 또는 'expenditure'
+  },
 })
 
-const formattedAmount = computed(() => props.amount.toLocaleString())
+// 부호 붙인 금액 텍스트
+const formattedAmount = computed(() => {
+  const sign = props.type === 'income' ? '+' : props.type === 'expenditure' ? '-' : ''
+  return `${sign}${props.amount.toLocaleString()} `
+})
 </script>
