@@ -45,8 +45,8 @@
 
       <TransactionItemList :transactions="previewTransactions" @click="goToDetail" />
     </div>
-    <!-- <NavBar /> -->
   </div>
+  <NavBar />
 </template>
 
 <script setup>
@@ -58,6 +58,8 @@ import TransactionItemList from '@/components/Transaction/TransactionItemList.vu
 import MonthlyCard from '@/components/home/MonthlyCard.vue'
 import { dummyTransactions } from '@/data/transactions.js'
 import { ChevronRight } from 'lucide-vue-next'
+import HeaderLayout from '@/components/layout/HeaderLayout.vue'
+import NavBar from '@/components/layout/NavBar.vue'
 
 const router = useRouter()
 const handleEditBudget = () => {

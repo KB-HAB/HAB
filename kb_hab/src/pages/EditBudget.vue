@@ -52,9 +52,7 @@ const goBack = () => {
 
 // DB에 저장하고 싶다면 실제 API 연동 필요
 const saveBudget = async () => {
-
     alert(`예산이 저장되었습니다: ${budget.value.toLocaleString()}원`)
-
     router.back()
 }
 </script>
