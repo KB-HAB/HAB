@@ -94,6 +94,7 @@ import TransactionItemList from '@/components/Transaction/TransactionItemList.vu
 import { dummyTransactions } from '@/data/transactions.js'
 import { useRouter } from 'vue-router'
 import 'element-plus/es/components/button/style/css'
+import axios from 'axios'
 
 const now = new Date()
 const selectedDate = ref(new Date())
@@ -119,7 +120,6 @@ const applyFilters = () => {
   selectedCategory.value = tempCategory.value
   selectedType.value = tempType.value
   isFilterOpen.value = false
-  console.log('selectedDateRange:', selectedDateRange.value)
 }
 
 const resetFilters = () => {
@@ -169,24 +169,58 @@ const endOfDay = (date) => {
   d.setHours(23, 59, 59, 999)
   return d
 }
-
+/*
 const filteredTransactions = computed(() => {
-  return dummyTransactions.value.filter((tx) => {
-    const txDate = new Date(tx.date)
+  return dummyTransactions.value
+    .filter((tx) => {
+      const txDate = new Date(tx.date)
 
-    const matchesDateRange =
-      selectedDateRange.value.length === 2
-        ? txDate >= startOfDay(selectedDateRange.value[0]) &&
-          txDate <= endOfDay(selectedDateRange.value[1])
-        : txDate.getFullYear() === currentYear.value && txDate.getMonth() + 1 === currentMonth.value
+      const matchesDateRange =
+        selectedDateRange.value.length === 2
+          ? txDate >= startOfDay(selectedDateRange.value[0]) &&
+            txDate <= endOfDay(selectedDateRange.value[1])
+          : txDate.getFullYear() === currentYear.value &&
+            txDate.getMonth() + 1 === currentMonth.value
 
-    const matchesCategory =
-      !selectedCategory.value || tx.category === Number(selectedCategory.value)
+      const matchesCategory =
+        !selectedCategory.value || tx.category === Number(selectedCategory.value)
 
-    const matchesType = !selectedType.value || tx.type === selectedType.value
+      const matchesType = !selectedType.value || tx.type === selectedType.value
 
-    return matchesDateRange && matchesCategory && matchesType
+      return matchesDateRange && matchesCategory && matchesType
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+})
+*/
+const filteredTransactions = computed(async () => {
+  const { data: dummyTransactions } = await axios.get('http://localhost:3000/transaction', {
+    params: {
+      _page: 1,
+      _per_page: 2,
+    },
   })
+  console.log(filteredTransactions)
+  console.log('selectedDateRange:', selectedDateRange.value)
+
+  return dummyTransactions.data
+    .filter((tx) => {
+      const txDate = new Date(tx.date)
+
+      const matchesDateRange =
+        selectedDateRange.value.length === 2
+          ? txDate >= startOfDay(selectedDateRange.value[0]) &&
+            txDate <= endOfDay(selectedDateRange.value[1])
+          : txDate.getFullYear() === currentYear.value &&
+            txDate.getMonth() + 1 === currentMonth.value
+
+      const matchesCategory =
+        !selectedCategory.value || tx.category === Number(selectedCategory.value)
+
+      const matchesType = !selectedType.value || tx.type === selectedType.value
+
+      return matchesDateRange && matchesCategory && matchesType
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
 })
 
 const router = useRouter()
