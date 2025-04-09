@@ -4,36 +4,114 @@
     <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
       <!-- 년.월 + <> 버튼 -->
       <div class="mb-2.5 flex items-center gap-1">
-        <button @click="goToPrevMonth">
+        <button v-if="!isFiltered" @click="goToPrevMonth">
           <ChevronLeft class="w-5 h-5" />
         </button>
         <span class="text-lg font-semibold">
-          {{ currentYear }}.{{ currentMonth.toString().padStart(2, '0') }}
+          {{ displayDateLabel }}
         </span>
-        <button @click="goToNextMonth" :disabled="isCurrentMonth" class="disabled:opacity-30">
+        <button
+          v-if="!isFiltered"
+          @click="goToNextMonth"
+          :disabled="isCurrentMonth"
+          class="disabled:opacity-30"
+        >
           <ChevronRight class="w-5 h-5" />
         </button>
+        <div class="ml-auto flex gap-2">
+          <button @click="isFilterOpen = true">
+            <Filter class="w-5 h-5" />
+          </button>
+          <el-button type="danger" plain @click="selectedDateRange = []"> 필터 초기화 </el-button>
+        </div>
       </div>
+
       <!-- 거래카드 -->
       <div style="background-color: #ffffff">
         <TransactionItemList :transactions="filteredTransactions" @click="goToDetail" />
       </div>
     </div>
   </div>
+
+  <el-dialog
+    v-model="isFilterOpen"
+    title="필터"
+    width="90%"
+    class="rounded-xl"
+    :close-on-click-modal="true"
+    :destroy-on-close="true"
+    center
+  >
+    <div class="space-y-4">
+      <!-- 기간 필터 -->
+      <div>
+        <label class="block mb-1 font-medium">기간</label>
+        <el-date-picker
+          v-model="selectedDateRange"
+          type="daterange"
+          start-placeholder="시작일"
+          end-placeholder="종료일"
+          class="w-full"
+        />
+      </div>
+
+      <!-- 카테고리 필터 -->
+      <div>
+        <label class="block mb-1 font-medium">카테고리</label>
+        <el-select v-model="selectedCategory" placeholder="전체" class="w-full">
+          <el-option label="전체" value="" />
+          <el-option label="식비" value="식비" />
+          <el-option label="교통" value="교통" />
+          <el-option label="쇼핑" value="쇼핑" />
+        </el-select>
+      </div>
+
+      <!-- 수입/지출 필터 -->
+      <div>
+        <label class="block mb-1 font-medium">수입/지출</label>
+        <el-select v-model="selectedType" placeholder="전체" class="w-full">
+          <el-option label="전체" value="" />
+          <el-option label="수입" value="수입" />
+          <el-option label="지출" value="지출" />
+        </el-select>
+      </div>
+
+      <!-- 버튼 -->
+      <div class="flex justify-end gap-2 pt-4">
+        <el-button @click="isFilterOpen = false">취소</el-button>
+        <el-button type="primary" @click="applyFilters">적용</el-button>
+      </div>
+    </div>
+  </el-dialog>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, Funnel } from 'lucide-vue-next'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
 import { dummyTransactions } from '@/data/transactions.js'
 import { useRouter } from 'vue-router'
+import 'element-plus/es/components/button/style/css'
 
 const now = new Date()
 const selectedDate = ref(new Date())
+const selectedDateRange = ref([])
+const selectedCategory = ref('')
+const selectedType = ref('')
 
 const currentYear = computed(() => selectedDate.value.getFullYear())
 const currentMonth = computed(() => selectedDate.value.getMonth() + 1)
+
+// 표시용 텍스트: 필터 날짜 있으면 그걸, 아니면 연.월
+const displayDateLabel = computed(() => {
+  if (selectedDateRange.value.length === 2) {
+    const start = selectedDateRange.value[0]
+    const end = selectedDateRange.value[1]
+    const format = (date) => `${date.getMonth() + 1}.${date.getDate()}`
+    return `${format(start)} ~ ${format(end)}`
+  }
+  return `${currentYear.value}.${String(currentMonth.value).padStart(2, '0')}`
+})
 
 // 현재 월인지 확인
 const isCurrentMonth = computed(() => {
@@ -62,9 +140,19 @@ const filteredTransactions = computed(() => {
   })
 })
 
+const applyFilters = () => {
+  console.log('날짜:', selectedDateRange.value)
+  console.log('카테고리:', selectedCategory.value)
+  console.log('수입/지출:', selectedType.value)
+  isFilterOpen.value = false
+}
+
 const router = useRouter()
 
 const goToDetail = (id) => {
-  router.push(`/transactions/${id}`)
+  router.push(`/transactions/${id}`) // ← 백틱 사용!
 }
+
+const isFilterOpen = ref(false)
+const isFiltered = computed(() => selectedDateRange.value.length === 2)
 </script>
