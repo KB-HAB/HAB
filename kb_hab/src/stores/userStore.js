@@ -17,6 +17,11 @@ export const useUserStore = defineStore('user', {
   actions: {
     // 사용자 정보 가져오기
     async fetchUser(id) {
+      if (!id) {
+        console.error('사용자 ID가 없습니다. fetchUser(id)를 호출해주세요.')
+        return
+      }
+
       this.isLoading = true
       try {
         const res = await axios.get(`http://localhost:3000/user/${id}`)
@@ -30,26 +35,21 @@ export const useUserStore = defineStore('user', {
     },
 
     // 사용자 정보 업데이트
-    async updateUser(data) {
-      try {
-        const res = await axios.patch(`http://localhost:3001/user/${data.id}`, data)
-        this.user = res.data
-      } catch (err) {
-        this.error = err
-        console.error('유저 업데이트 실패:', err)
-      }
-    },
+    // async updateUser(data) {
+    //   try {
+    //     const res = await axios.patch(`http://localhost:3001/user/${data.id}`, data)
+    //     this.user = res.data
+    //   } catch (err) {
+    //     this.error = err
+    //     console.error('유저 업데이트 실패:', err)
+    //   }
+    // },
 
-    // 예산만 따로 업데이트
-    async updateBudget(amount) {
-      if (!this.user) return
-
-      // 기존 사용자 정보 복사 + 예산 갱신
-      const updated = { ...this.user, budgetMonthly: amount }
-
-      this.user.budgetMonthly = amount
-      // 서버에도 업데이트 요청
-      await this.updateUser(updated)
-    },
+    // // 예산만 따로 업데이트
+    // async updateBudget(amount) {
+    //   if (!this.user) return
+    //   const updated = { ...this.user, budgetMonthly: amount }
+    //   await this.updateUser(updated)
+    // },
   },
 })
