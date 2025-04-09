@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // import HomeView from '@/pages/HomeView.vue'
-import OnBoarding from "@/pages/OnBoarding.vue";
-import HomePage from "@/pages/HomePage.vue";
-import TransactionHistory from "@/pages/TransactionHistory.vue";
-import TransactionDetails from "@/pages/TransactionDetails.vue";
-import AddTransaction from "@/pages/AddTransaction.vue";
-import SettingView from "@/pages/SettingView.vue";
-import EditProfile from "@/pages/EditProfile.vue";
-import EditBudget from "@/pages/EditBudget.vue";
+import OnboardingView from '@/pages/OnboardingView.vue'
+import HomePage from '@/pages/HomePage.vue'
+import TransactionHistory from '@/pages/TransactionHistory.vue'
+import TransactionDetails from '@/pages/TransactionDetails.vue'
+import AddTransaction from '@/pages/AddTransaction.vue'
+import SettingView from '@/pages/SettingView.vue'
+import EditProfile from '@/pages/EditProfile.vue'
+import EditBudget from '@/pages/EditBudget.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +15,7 @@ const router = createRouter({
     {
       path: '/onboard',
       name: 'onboard',
-      component: OnBoarding,
+      component: OnboardingView,
     },
     {
       path: '/',
