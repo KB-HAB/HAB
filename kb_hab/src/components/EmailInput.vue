@@ -1,5 +1,6 @@
 <template>
-  <div class="space-y-1">
+  <div class="flex flex-col gap-2">
+    <label>이메일</label>
     <input
       type="email"
       :value="modelValue"
