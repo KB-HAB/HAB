@@ -1,13 +1,12 @@
 <template>
   <div class="p-4">
-    <!-- Header 영역: 인라인 뒤로가기 버튼 -->
+    <!-- Header: 뒤로가기 버튼 -->
     <header class="flex items-center gap-2 mb-6">
       <button @click="handleBack" class="p-2 hover:bg-gray-100 rounded-full">
         <ChevronLeft class="w-5 h-5" />
       </button>
     </header>
 
-    <!-- Body 영역: 입력 폼 -->
     <div class="mt-6 space-y-6">
       <!-- 날짜 선택 -->
       <div>
@@ -79,7 +78,6 @@
 
       <!-- 버튼 영역: 저장하기만 존재 -->
       <div class="flex justify-end mt-8">
-        <!-- 저장하기 버튼 -->
         <CommonButton
           variant="black"
           :disabled="!canSave"
@@ -109,7 +107,6 @@ import { reactive, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ChevronLeft } from 'lucide-vue-next'
 
-// 재사용 컴포넌트들
 import InputWithLength from '@/components/common/InputWithLength.vue'
 import PriceInput from '@/components/common/PriceInput.vue'
 import TwoButtonSelect from '@/components/Transaction/TwoButtonSelect.vue'
@@ -117,7 +114,7 @@ import CommonButton from '@/components/common/CommonButton.vue'
 
 const router = useRouter()
 
-// 거래 데이터
+// 거래 데이터 초기값
 const transaction = reactive({
   date: new Date().toISOString().slice(0, 10),
   name: '',
@@ -134,12 +131,12 @@ const categories = [
   { id: 3, name: '쇼핑' },
 ]
 
-// 뒤로가기 핸들러
+// 뒤로가기
 const handleBack = () => {
   router.back()
 }
 
-// 모든 필수 입력이 채워졌는지 확인하는 computed 속성
+// 필수 필드가 모두 채워졌는지 확인
 const canSave = computed(() => {
   return (
     transaction.name.trim() !== '' &&
@@ -150,7 +147,7 @@ const canSave = computed(() => {
   )
 })
 
-// 저장 버튼 활성화 클래스: 모든 필수 입력이 채워지면 활성화, 아니면 비활성화 스타일 적용
+// 저장 버튼 활성화 클래스 (필수 입력이 모두 채워지면 빈 문자열, 아니면 비활성화 스타일)
 const saveButtonClasses = computed(() => {
   return canSave.value ? '' : 'opacity-50 cursor-not-allowed'
 })
