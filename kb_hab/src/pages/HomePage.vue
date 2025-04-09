@@ -1,7 +1,7 @@
 <template>
   <HeaderLayout />
   <div class="p-4 space-y-2">
-    <!-- 하루 쓸 수 있는 돈 -->
+    <!-- 하루 쓸수 있는 돈 -->
     <div class="h-[102px]">
       <HomeCard
         title="이대로 가면 <strong>하루</strong>에 쓸 수 있는 돈"
