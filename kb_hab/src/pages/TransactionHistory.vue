@@ -162,12 +162,12 @@ const filteredTransactions = computed(() => {
 
     const matchesDateRange =
       selectedDateRange.value.length === 2
-        ? txDate >= new Date(selectedDateRange.value[0]) &&
-          txDate <= new Date(selectedDateRange.value[1])
+        ? txDate.toDateString() >= new Date(selectedDateRange.value[0]).toDateString() &&
+          txDate.toDateString() <= new Date(selectedDateRange.value[1]).toDateString()
         : txDate.getFullYear() === currentYear.value && txDate.getMonth() + 1 === currentMonth.value
 
     const matchesCategory =
-      !selectedCategory.value || tx.categoryId === Number(selectedCategory.value)
+      !selectedCategory.value || tx.category === Number(selectedCategory.value)
 
     const matchesType = !selectedType.value || tx.type === selectedType.value
 
