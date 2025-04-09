@@ -7,7 +7,7 @@
         <ChevronLeft class="w-5 h-5" />
       </button>
 
-      <!-- 현재 월 표시 버튼 (클릭 시 date-picker 열림) -->
+      <!-- 현재 월 표시 버튼 (클릭 시 date-picker) -->
       <span class="px-1">
         {{ formattedMonth }}
       </span>
@@ -18,9 +18,9 @@
       </button>
 
       <!-- 캘린더 아이콘만 있는 버튼 -->
-      <button @click="openMonthPicker" class="p-1 rounded hover:bg-gray-200 transition">
+      <IconButton :onClick="openMonthPicker">
         <CalendarDays class="w-5 h-5 text-gray-700" />
-      </button>
+      </IconButton>
 
       <!-- 숨겨진 month picker -->
       <el-date-picker
@@ -71,6 +71,7 @@ import { ref, computed } from 'vue'
 import { defineProps, defineEmits } from 'vue'
 import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-vue-next'
 import HomeCard from '@/components/home/HomeCard.vue'
+import IconButton from '@/components/common/IconButton.vue'
 
 // dayjs 추가
 import dayjs from 'dayjs'
