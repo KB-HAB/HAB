@@ -9,20 +9,20 @@
       <section>
         <div class="flex items-center gap-2 mb-1">
           <!-- Title(닉네임) -->
-          <p class="text-xl font-bold">닉네임</p>
+          <p class="text-xl font-bold">{{user.nickname}}</p>
           <!-- IconButton(연필) -->
           <button class="text-gray-500 text-sm" :onClick="editNickname">
             <Pencil />
           </button>
         </div>
         <!-- Title(이메일) -->
-        <p class="text-sm text-gray-400">{{ email }}</p>
+        <p class="text-sm text-gray-400">{{ user.email }}</p>
       </section>
 
       <!-- SettingButton: 내 데이터 삭제 -->
       <button
-          @click="openDialog = true"
-          class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
+        @click="openDialog = true"
+        class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
       >
         <div class="flex items-center gap-3">
           <Trash2 />
@@ -32,8 +32,8 @@
 
       <!-- SettingButton: 월 예산 설정 -->
       <button
-          @click="goToBudget"
-          class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
+        @click="goToBudget"
+        class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
       >
         <div class="flex items-center gap-3">
           <HandCoins />
@@ -70,17 +70,39 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive,onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const openDialog = ref(false)
 const router = useRouter()
 const email = ref('hello@email.com')
+const nickName = ref('닉네임')
 
 const handleDelete = () => {
   openDialog.value = false
   alert('삭제되었습니다.')
 }
+
+const user = reactive({ id: '', nickname: '', email: '' })
+
+// 컴포넌트가 마운트되면 API 요청
+onMounted(async () => {
+  try {
+    // 이메일로 유저 정보 요청 (json-server는 항상 배열 형태로 반환)
+    const response = await axios.get('http://localhost:3000/users')
+    if (response.data && response.data.length > 0) {
+      user.id = response.data[0].id
+      user.nickname = response.data[0].nickname
+      user.email = response.data[0].email
+    } else {
+      console.warn('해당 이메일의 유저를 찾을 수 없습니다.')
+    }
+  } catch (error) {
+    console.error('유저 정보를 가져오는 중 에러 발생:', error)
+  }
+})
+
 
 import { Pencil, Trash2, HandCoins, House } from 'lucide-vue-next'
 
