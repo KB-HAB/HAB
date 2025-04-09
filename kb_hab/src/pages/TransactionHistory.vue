@@ -100,6 +100,7 @@ const selectedDate = ref(new Date())
 const selectedDateRange = ref([])
 const selectedCategory = ref('')
 const selectedType = ref('')
+const isFilterOpen = ref(false)
 
 // 임시 저장용
 const tempDateRange = ref([])
@@ -114,10 +115,11 @@ const openFilterDialog = () => {
 }
 
 const applyFilters = () => {
-  selectedDateRange.value = [...tempDateRange.value]
+  selectedDateRange.value = tempDateRange.value.map((d) => new Date(d))
   selectedCategory.value = tempCategory.value
   selectedType.value = tempType.value
   isFilterOpen.value = false
+  console.log('selectedDateRange:', selectedDateRange.value)
 }
 
 const resetFilters = () => {
@@ -134,7 +136,7 @@ const displayDateLabel = computed(() => {
     const start = selectedDateRange.value[0]
     const end = selectedDateRange.value[1]
     const format = (date) => `${date.getMonth() + 1}.${date.getDate()}`
-    return `${format(start)} ~ ${format(end)}`
+    return `${format(start)} - ${format(end)}`
   }
   return `${currentYear.value}.${String(currentMonth.value).padStart(2, '0')}`
 })
@@ -156,14 +158,26 @@ const goToNextMonth = () => {
   }
 }
 
+const startOfDay = (date) => {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+const endOfDay = (date) => {
+  const d = new Date(date)
+  d.setHours(23, 59, 59, 999)
+  return d
+}
+
 const filteredTransactions = computed(() => {
   return dummyTransactions.value.filter((tx) => {
     const txDate = new Date(tx.date)
 
     const matchesDateRange =
       selectedDateRange.value.length === 2
-        ? txDate.toDateString() >= new Date(selectedDateRange.value[0]).toDateString() &&
-          txDate.toDateString() <= new Date(selectedDateRange.value[1]).toDateString()
+        ? txDate >= startOfDay(selectedDateRange.value[0]) &&
+          txDate <= endOfDay(selectedDateRange.value[1])
         : txDate.getFullYear() === currentYear.value && txDate.getMonth() + 1 === currentMonth.value
 
     const matchesCategory =
@@ -200,6 +214,5 @@ const categoryMap = {
   17: '저축·투자',
 }
 
-const isFilterOpen = ref(false)
 const isFiltered = computed(() => selectedDateRange.value.length === 2)
 </script>
