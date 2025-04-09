@@ -10,30 +10,23 @@
     <main class="flex-1 flex flex-col justify-between">
       <div>
         <label class="block font-bold mb-2">월 예산 (원)</label>
-        <CommonInput
-            v-model="displayBudget"
-            @input="onBudgetInput"
-            placeholder="예: 500,000"
-            class="text-left font-medium"
-        />
+        <!-- 수정된 PriceInput을 사용해도 됨 -->
+        <PriceInput v-model="budget" placeholder="예: 500,000" />
       </div>
 
       <!-- Footer 버튼 영역 -->
       <div class="flex justify-between mt-10 gap-4">
-        <!-- CommonButton.vue (취소) -->
         <CommonButton
-            variant="white"
-            :onClick="goBack"
-            class="w-full justify-center"
+          variant="white"
+          :onClick="goBack"
+          class="w-full justify-center"
         >
           취소
         </CommonButton>
-
-        <!-- CommonButton.vue (저장) -->
         <CommonButton
-            variant="black"
-            :onClick="saveBudget"
-            class="w-full justify-center"
+          variant="black"
+          :onClick="saveBudget"
+          class="w-full justify-center"
         >
           <Pencil class="w-4 h-4" /> 저장하기
         </CommonButton>
@@ -43,48 +36,31 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+// import axios from 'axios'
 import CommonButton from '@/components/common/CommonButton.vue'
-import CommonInput from '@/components/common/CommonInput.vue'
+import PriceInput from '@/components/common/PriceInput.vue' // 수정된 컴포넌트
 import { Pencil, House } from 'lucide-vue-next'
-
-// 👉 숫자 포맷 함수 (천 단위 콤마)
-const formatNumber = (num) => {
-  return num.toLocaleString()
-}
 
 const router = useRouter()
 const budget = ref(500000)
-const displayBudget = ref('')
 
-// 초기화 시 한 번 설정
-displayBudget.value = formatNumber(budget.value)
-
-// budget이 바뀔 때마다 displayBudget 자동 갱신
-watch(budget, (newVal) => {
-  displayBudget.value = formatNumber(newVal)
-})
-
-// 뒤로가기
 const goBack = () => {
   router.back()
 }
 
-// 저장 버튼 클릭
-const saveBudget = () => {
-  alert(`예산이 저장되었습니다: ${formatNumber(budget.value)}원`)
-  router.back()
-}
+// DB에 저장하고 싶다면 실제 API 연동 필요
+const saveBudget = async () => {
 
-// 숫자 입력 처리
-const onBudgetInput = (e) => {
-  const raw = e.target.value.replace(/[^\\d]/g, '')
-  budget.value = Number(raw)
+    alert(`예산이 저장되었습니다: ${budget.value.toLocaleString()}원`)
+
+    router.back()
 }
 </script>
 
 <style scoped>
+/* 스타일은 필요에 따라 작성 */
 input:focus {
   outline: none;
 }
