@@ -4,13 +4,13 @@
     :class="[bgColor, textColor]"
   >
     <!-- 아이콘 버튼의 위치를 더 안쪽으로 이동 -->
-    <button
+    <IconButton
       v-if="iconButton"
+      :onClick="iconButton.onClick"
       class="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
-      @click="iconButton.onClick"
     >
       <component :is="iconButton.icon" class="w-5 h-5" />
-    </button>
+    </IconButton>
 
     <div class="flex flex-col justify-between h-full">
       <span class="text-left self-start text-sm" v-html="title"></span>
@@ -21,6 +21,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import IconButton from '@/components/common/IconButton.vue'
 
 const props = defineProps({
   title: {

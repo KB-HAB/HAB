@@ -1,16 +1,40 @@
 <template>
   <div class="bg-white rounded-2xl p-4 shadow-2xl space-y-3">
     <!-- 월 네비게이션 -->
-    <div class="mb-2.5 flex items-center gap-1">
+    <div class="flex items-center gap-1 text-lg font-semibold mb-2.5">
+      <!-- 이전 달 버튼 -->
       <button @click="goToPrevMonth">
         <ChevronLeft class="w-5 h-5" />
       </button>
-      <span class="text-lg font-semibold">
-        {{ currentYear }}.{{ currentMonth.toString().padStart(2, '0') }}
+
+      <!-- 현재 월 표시 버튼 (클릭 시 date-picker) -->
+      <span class="px-1">
+        {{ formattedMonth }}
       </span>
+
+      <!-- 다음 달 버튼 -->
       <button @click="goToNextMonth" :disabled="isCurrentMonth" class="disabled:opacity-30">
         <ChevronRight class="w-5 h-5" />
       </button>
+
+      <!-- 캘린더 아이콘만 있는 버튼 -->
+      <IconButton :onClick="openMonthPicker">
+        <CalendarDays class="w-5 h-5 text-gray-700" />
+      </IconButton>
+
+      <!-- 숨겨진 month picker -->
+      <el-date-picker
+        ref="monthPickerRef"
+        v-model="selectedMonth"
+        type="month"
+        format="YYYY.MM"
+        value-format="YYYY-MM"
+        :teleported="false"
+        :editable="false"
+        :prefix-icon="null"
+        class="absolute w-0 h-0 opacity-0 pointer-events-none"
+        @change="handleMonthChange"
+      />
     </div>
 
     <!-- 수입/지출 카드 -->
@@ -45,8 +69,14 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { defineProps, defineEmits } from 'vue'
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-vue-next'
 import HomeCard from '@/components/home/HomeCard.vue'
+import IconButton from '@/components/common/IconButton.vue'
+
+// dayjs 추가
+import dayjs from 'dayjs'
+import 'dayjs/locale/ko'
+dayjs.locale('ko')
 
 const props = defineProps({
   income: {
@@ -62,32 +92,44 @@ const props = defineProps({
 // emit으로 거래 클릭 이벤트 전달
 const emit = defineEmits(['click'])
 
-// 날짜 상태
-const now = new Date()
-const selectedDate = ref(new Date())
+// 현재 선택된 월 (기본값: 오늘)
+const selectedMonth = ref(dayjs().format('YYYY-MM'))
+const monthPickerRef = ref(null)
 
-const currentYear = computed(() => selectedDate.value.getFullYear())
-const currentMonth = computed(() => selectedDate.value.getMonth() + 1)
-
-// 현재 월인지 확인
-const isCurrentMonth = computed(() => {
-  return currentYear.value === now.getFullYear() && currentMonth.value === now.getMonth() + 1
+const formattedMonth = computed(() => {
+  return dayjs(selectedMonth.value).format('YYYY.MM')
 })
 
-// 월 이동
+// 현재 월 확인
+const isCurrentMonth = computed(() => {
+  const today = dayjs()
+  const selected = dayjs(selectedMonth.value)
+  return today.year() === selected.year() && today.month() === selected.month()
+})
+
+// 이전 달 이동
 const goToPrevMonth = () => {
-  selectedDate.value = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth() - 1)
+  selectedMonth.value = dayjs(selectedMonth.value).subtract(1, 'month').format('YYYY-MM')
 }
+
+// 다음 달 이동
 const goToNextMonth = () => {
   if (!isCurrentMonth.value) {
-    selectedDate.value = new Date(
-      selectedDate.value.getFullYear(),
-      selectedDate.value.getMonth() + 1,
-    )
+    selectedMonth.value = dayjs(selectedMonth.value).add(1, 'month').format('YYYY-MM')
   }
 }
 
-// 수입 - 지출
+// 달 클릭 시 date-picker 열기
+const openMonthPicker = () => {
+  monthPickerRef.value?.focus()
+}
+
+// 달력에서 선택했을 때 값 반영
+const handleMonthChange = (val) => {
+  selectedMonth.value = val // 이 값은 'YYYY-MM' 형식 문자열
+}
+
+// 순수익 = 수입 - 지출
 const NetProfit = computed(() => {
   const result = props.income - props.expenditure
   return isNaN(result) ? 0 : result
