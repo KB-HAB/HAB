@@ -15,8 +15,20 @@
 
     <!-- 수입/지출 카드 -->
     <div class="flex gap-3">
-      <HomeCard title="수입" :amount="income" bgColor="bg-[#4B4B4B]" textColor="text-white" />
-      <HomeCard title="지출" :amount="expenditure" bgColor="bg-[#F8F8F8]" textColor="text-black" />
+      <HomeCard
+        title="수입"
+        type="income"
+        :amount="income"
+        bgColor="bg-[#4B4B4B]"
+        textColor="text-white"
+      />
+      <HomeCard
+        title="지출"
+        type="expenditure"
+        :amount="expenditure"
+        bgColor="bg-[#F8F8F8]"
+        textColor="text-black"
+      />
     </div>
 
     <!-- 순수익 -->
@@ -32,10 +44,20 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import HomeCard from '@/components/home/HomeCard.vue'
-import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
-import { dummyTransactions } from '@/data/transactions.js'
+
+const props = defineProps({
+  income: {
+    type: Number,
+    default: 0,
+  },
+  expenditure: {
+    type: Number,
+    default: 0,
+  },
+})
 
 // emit으로 거래 클릭 이벤트 전달
 const emit = defineEmits(['click'])
@@ -66,7 +88,7 @@ const goToNextMonth = () => {
 }
 
 // 수입 - 지출
-const netProfit = computed(() => {
+const NetProfit = computed(() => {
   const result = props.income - props.expenditure
   return isNaN(result) ? 0 : result
 })

@@ -31,8 +31,9 @@
 
     <!-- 수입 / 지출 요약 -->
     <div class="w-full">
-      <MonthlyCard :income="300000" :expenditure="180000" @click="goToDetail" />
+      <MonthlyCard :income="300000" :expenditure="180000" />
     </div>
+
     <!-- 최근 거래내역 -->
     <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
       <div class="flex justify-between items-center mb-2" @click="gotoHistory">
