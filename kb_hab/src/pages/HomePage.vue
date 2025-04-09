@@ -46,6 +46,7 @@
 </template>
 
 <script setup>
+import { watchEffect } from 'vue'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -61,6 +62,9 @@ import NavBar from '@/components/layout/NavBar.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
+watchEffect(() => {
+  console.log('nickname:', userStore.user?.nickname)
+})
 
 // 마운트 시 사용자 정보 가져오기 (선택)
 onMounted(() => {
@@ -70,7 +74,7 @@ onMounted(() => {
 })
 // 제목 생성
 const cardTitle = computed(() => {
-  const name = userStore.nickname || '엥'
+  const name = userStore.user?.nickname || '엥'
   return `<strong>${name}</strong>님이 오늘 하루</strong>에 쓸 수 있는 돈`
 })
 
