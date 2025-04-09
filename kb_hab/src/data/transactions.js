@@ -49,4 +49,20 @@ export const dummyTransactions = ref([
     category: 4,
     type: '지출',
   },
+  {
+    id: 7,
+    date: '2025-04-06',
+    title: '월급',
+    amount: 10000000,
+    category: 16,
+    type: '수입',
+  },
+  {
+    id: 8,
+    date: '2025-04-04',
+    title: '술',
+    amount: 150000,
+    category: 4,
+    type: '지출',
+  },
 ])
