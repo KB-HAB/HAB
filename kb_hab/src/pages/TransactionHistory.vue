@@ -1,5 +1,4 @@
 <template>
-  <!-- <Header /> -->
   <div class="p-2.5">
     <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
       <!-- 년.월 + <> 버튼 -->
@@ -19,10 +18,10 @@
           <ChevronRight class="w-5 h-5" />
         </button>
         <div class="ml-auto flex gap-2">
-          <button @click="isFilterOpen = true">
+          <button @click="openFilterDialog">
             <Filter class="w-5 h-5" />
           </button>
-          <el-button type="danger" plain @click="selectedDateRange = []"> 필터 초기화 </el-button>
+          <el-button type="danger" plain @click="resetFilters">필터 초기화</el-button>
         </div>
       </div>
 
@@ -47,7 +46,7 @@
       <div>
         <label class="block mb-1 font-medium">기간</label>
         <el-date-picker
-          v-model="selectedDateRange"
+          v-model="tempDateRange"
           type="daterange"
           start-placeholder="시작일"
           end-placeholder="종료일"
@@ -58,18 +57,21 @@
       <!-- 카테고리 필터 -->
       <div>
         <label class="block mb-1 font-medium">카테고리</label>
-        <el-select v-model="selectedCategory" placeholder="전체" class="w-full">
-          <el-option label="전체" value="" />
-          <el-option label="식비" value="식비" />
-          <el-option label="교통" value="교통" />
-          <el-option label="쇼핑" value="쇼핑" />
+        <el-select v-model="tempCategory" placeholder="전체" class="w-full">
+          <el-option label="전체" :value="''" />
+          <el-option
+            v-for="(label, id) in categoryMap"
+            :key="id"
+            :label="label"
+            :value="Number(id)"
+          />
         </el-select>
       </div>
 
       <!-- 수입/지출 필터 -->
       <div>
         <label class="block mb-1 font-medium">수입/지출</label>
-        <el-select v-model="selectedType" placeholder="전체" class="w-full">
+        <el-select v-model="tempType" placeholder="전체" class="w-full">
           <el-option label="전체" value="" />
           <el-option label="수입" value="수입" />
           <el-option label="지출" value="지출" />
@@ -87,7 +89,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { ChevronLeft, ChevronRight, Funnel } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, Filter } from 'lucide-vue-next'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
 import { dummyTransactions } from '@/data/transactions.js'
 import { useRouter } from 'vue-router'
@@ -99,10 +101,34 @@ const selectedDateRange = ref([])
 const selectedCategory = ref('')
 const selectedType = ref('')
 
+// 임시 저장용
+const tempDateRange = ref([])
+const tempCategory = ref('')
+const tempType = ref('')
+
+const openFilterDialog = () => {
+  tempDateRange.value = selectedDateRange.value ? [...selectedDateRange.value] : []
+  tempCategory.value = selectedCategory.value
+  tempType.value = selectedType.value
+  isFilterOpen.value = true
+}
+
+const applyFilters = () => {
+  selectedDateRange.value = [...tempDateRange.value]
+  selectedCategory.value = tempCategory.value
+  selectedType.value = tempType.value
+  isFilterOpen.value = false
+}
+
+const resetFilters = () => {
+  selectedDateRange.value = []
+  selectedCategory.value = ''
+  selectedType.value = ''
+}
+
 const currentYear = computed(() => selectedDate.value.getFullYear())
 const currentMonth = computed(() => selectedDate.value.getMonth() + 1)
 
-// 표시용 텍스트: 필터 날짜 있으면 그걸, 아니면 연.월
 const displayDateLabel = computed(() => {
   if (selectedDateRange.value.length === 2) {
     const start = selectedDateRange.value[0]
@@ -113,7 +139,6 @@ const displayDateLabel = computed(() => {
   return `${currentYear.value}.${String(currentMonth.value).padStart(2, '0')}`
 })
 
-// 현재 월인지 확인
 const isCurrentMonth = computed(() => {
   return currentYear.value === now.getFullYear() && currentMonth.value === now.getMonth() + 1
 })
@@ -133,24 +158,46 @@ const goToNextMonth = () => {
 
 const filteredTransactions = computed(() => {
   return dummyTransactions.value.filter((tx) => {
-    const txDate = new Date(tx.date) // tx.date는 '2025-04-01' 같은 문자열
-    return (
-      txDate.getFullYear() === currentYear.value && txDate.getMonth() + 1 === currentMonth.value
-    )
+    const txDate = new Date(tx.date)
+
+    const matchesDateRange =
+      selectedDateRange.value.length === 2
+        ? txDate >= new Date(selectedDateRange.value[0]) &&
+          txDate <= new Date(selectedDateRange.value[1])
+        : txDate.getFullYear() === currentYear.value && txDate.getMonth() + 1 === currentMonth.value
+
+    const matchesCategory =
+      !selectedCategory.value || tx.categoryId === Number(selectedCategory.value)
+
+    const matchesType = !selectedType.value || tx.type === selectedType.value
+
+    return matchesDateRange && matchesCategory && matchesType
   })
 })
 
-const applyFilters = () => {
-  console.log('날짜:', selectedDateRange.value)
-  console.log('카테고리:', selectedCategory.value)
-  console.log('수입/지출:', selectedType.value)
-  isFilterOpen.value = false
+const router = useRouter()
+const goToDetail = (id) => {
+  router.push(`/transactions/${id}`)
 }
 
-const router = useRouter()
-
-const goToDetail = (id) => {
-  router.push(`/transactions/${id}`) // ← 백틱 사용!
+const categoryMap = {
+  1: '식비',
+  2: '카페·간식',
+  3: '편의점·마트·잡화',
+  4: '술·유흥',
+  5: '쇼핑',
+  6: '취미·여가',
+  7: '의료·건강·피트니스',
+  8: '주거·통신',
+  9: '보험·세금·기타금융',
+  10: '미용',
+  11: '교통',
+  12: '교육',
+  13: '생활',
+  14: '카테고리 없음',
+  15: '이체',
+  16: '급여',
+  17: '저축·투자',
 }
 
 const isFilterOpen = ref(false)
