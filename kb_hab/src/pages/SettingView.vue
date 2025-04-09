@@ -21,8 +21,8 @@
 
       <!-- SettingButton: 내 데이터 삭제 -->
       <button
-        @click="openDialog = true"
-        class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
+          @click="openDialog = true"
+          class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
       >
         <div class="flex items-center gap-3">
           <Trash2 />
@@ -32,8 +32,8 @@
 
       <!-- SettingButton: 월 예산 설정 -->
       <button
-        @click="goToBudget"
-        class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
+          @click="goToBudget"
+          class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left"
       >
         <div class="flex items-center gap-3">
           <HandCoins />
