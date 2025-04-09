@@ -46,32 +46,30 @@
 </template>
 
 <script setup>
-import { watchEffect } from 'vue'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
 import { Pencil } from 'lucide-vue-next'
-import HomeCard from '@/components/home/HomeCard.vue'
-import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
-import MonthlyCard from '@/components/home/MonthlyCard.vue'
-import { useUserStore } from '@/stores/userStore'
-import { dummyTransactions } from '@/data/transactions.js'
 import { ChevronRight } from 'lucide-vue-next'
+
+import HomeCard from '@/components/home/HomeCard.vue'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import NavBar from '@/components/layout/NavBar.vue'
+import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
+import MonthlyCard from '@/components/home/MonthlyCard.vue'
+
+import { useUserStore } from '@/stores/userStore'
+import { dummyTransactions } from '@/data/transactions.js'
 
 const router = useRouter()
 const userStore = useUserStore()
-watchEffect(() => {
-  console.log('nickname:', userStore.user?.nickname)
-})
 
 // 마운트 시 사용자 정보 가져오기 (선택)
 onMounted(() => {
   if (!userStore.user) {
-    userStore.fetchUser()
+    userStore.fetchUser(1)
   }
 })
+
 // 제목 생성
 const cardTitle = computed(() => {
   const name = userStore.user?.nickname || '엥'
@@ -88,8 +86,16 @@ const goToDetail = (id) => {
   router.push(`/transactions/${id}`)
 }
 
-const dailyAmount = ref()
-const weeklyAmount = ref()
-const remainingAmount = ref()
+const dailyAmount = ref(0)
+const weeklyAmount = ref(0)
+
+// 남은 돈 계산
+const remainingAmount = computed(() => {
+  const budget = userStore.budgetMonthly
+  const spent = 10000 // ← EXPENDITURE로 대체 예정
+  return budget - spent
+})
+
+// 거래
 const previewTransactions = computed(() => dummyTransactions.value.slice(0, 4))
 </script>

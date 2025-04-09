@@ -4,7 +4,7 @@
       "id": "1",
       "nickname": "홍길동",
       "email": "hong@test.com",
-      "budgetMonthly": "100000"
+      "budgetMonthly": 300000
     }
   ],
   "category": [
