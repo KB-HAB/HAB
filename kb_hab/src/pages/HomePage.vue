@@ -1,5 +1,5 @@
 <template>
-  <!-- <Header /> -->
+  <HeaderLayout />
   <div class="p-4 space-y-2">
     <!-- 하루 쓸 수 있는 돈 -->
     <div class="h-[102px]">
@@ -10,6 +10,7 @@
       />
     </div>
 
+    <!-- 일주일/남은돈 -->
     <div class="flex gap-3">
       <!-- 일주일 -->
       <HomeCard
@@ -29,7 +30,9 @@
     </div>
 
     <!-- 수입 / 지출 요약 -->
-
+    <div class="w-full">
+      <MonthlyCard :income="300000" :expenditure="180000" @click="goToDetail" />
+    </div>
     <!-- 최근 거래내역 -->
     <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
       <div class="flex justify-between items-center mb-2" @click="gotoHistory">
@@ -51,6 +54,7 @@ import { Pencil } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import HomeCard from '@/components/home/HomeCard.vue'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
+import MonthlyCard from '@/components/home/MonthlyCard.vue'
 import { dummyTransactions } from '@/data/transactions.js'
 import { ChevronRight } from 'lucide-vue-next'
 
