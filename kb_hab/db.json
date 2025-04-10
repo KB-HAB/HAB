@@ -27,7 +27,7 @@
       "title": "월급",
       "memo": "3월 급여",
       "amount": 2439791,
-      "date": "2025-03-07",
+      "date": 20250307,
       "type": "INCOME",
       "category_id": 3
     },
@@ -36,7 +36,7 @@
       "title": "저녁 식사",
       "memo": "친구와 식사",
       "amount": 20817,
-      "date": "2025-03-13",
+      "date": 20250313,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -45,7 +45,7 @@
       "title": "월급",
       "memo": "1월 급여",
       "amount": 2188983,
-      "date": "2025-02-15",
+      "date": 20250215,
       "type": "INCOME",
       "category_id": 3
     },
@@ -54,7 +54,7 @@
       "title": "택시",
       "memo": "퇴근길",
       "amount": 14961,
-      "date": "2025-02-11",
+      "date": 20250211,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -63,7 +63,7 @@
       "title": "월급",
       "memo": "2월 급여",
       "amount": 2220668,
-      "date": "2025-01-08",
+      "date": 20250108,
       "type": "INCOME",
       "category_id": 3
     },
@@ -72,7 +72,7 @@
       "title": "택시",
       "memo": "야근 후 귀가",
       "amount": 20767,
-      "date": "2025-01-03",
+      "date": 20250103,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -81,7 +81,7 @@
       "title": "월급",
       "memo": "2월 급여",
       "amount": 2125623,
-      "date": "2024-12-22",
+      "date": 20241222,
       "type": "INCOME",
       "category_id": 3
     },
@@ -90,7 +90,7 @@
       "title": "지하철",
       "memo": "야근 후 귀가",
       "amount": 10013,
-      "date": "2025-02-23",
+      "date": 20250223,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -99,7 +99,7 @@
       "title": "기타 지출",
       "memo": "충동 구매",
       "amount": 28917,
-      "date": "2025-02-19",
+      "date": 20250219,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -108,7 +108,7 @@
       "title": "도서 구입",
       "memo": "충동 구매",
       "amount": 26749,
-      "date": "2025-02-04",
+      "date": 20250204,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -117,7 +117,7 @@
       "title": "택시",
       "memo": "출근길",
       "amount": 2659,
-      "date": "2024-12-01",
+      "date": 20241201,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -126,7 +126,7 @@
       "title": "도서 구입",
       "memo": "자기계발",
       "amount": 19202,
-      "date": "2025-03-28",
+      "date": 20250328,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -135,7 +135,7 @@
       "title": "술",
       "memo": "스타벅스",
       "amount": 9500,
-      "date": "2025-01-06",
+      "date": 20250106,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -144,7 +144,7 @@
       "title": "기타 지출",
       "memo": "자기계발",
       "amount": 23175,
-      "date": "2025-01-25",
+      "date": 20250125,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -153,7 +153,7 @@
       "title": "월급",
       "memo": "3월 급여",
       "amount": 2324510,
-      "date": "2024-12-19",
+      "date": 20241219,
       "type": "INCOME",
       "category_id": 3
     },
@@ -162,7 +162,7 @@
       "title": "버스비",
       "memo": "퇴근길",
       "amount": 14648,
-      "date": "2025-02-15",
+      "date": 20250215,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -171,7 +171,7 @@
       "title": "도서 구입",
       "memo": "지인 생일",
       "amount": 12898,
-      "date": "2025-01-01",
+      "date": 20250101,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -180,7 +180,7 @@
       "title": "도서 구입",
       "memo": "자기계발",
       "amount": 9859,
-      "date": "2025-03-01",
+      "date": 20250301,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -189,7 +189,7 @@
       "title": "지하철",
       "memo": "출근길",
       "amount": 16022,
-      "date": "2025-03-03",
+      "date": 20250303,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -198,7 +198,7 @@
       "title": "택시",
       "memo": "퇴근길",
       "amount": 5444,
-      "date": "2025-02-27",
+      "date": 20250227,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -207,7 +207,7 @@
       "title": "기타 지출",
       "memo": "충동 구매",
       "amount": 13935,
-      "date": "2025-01-20",
+      "date": 20250120,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -216,7 +216,7 @@
       "title": "택시",
       "memo": "야근 후 귀가",
       "amount": 8410,
-      "date": "2025-03-16",
+      "date": 20250316,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -225,7 +225,7 @@
       "title": "기타 지출",
       "memo": "충동 구매",
       "amount": 12335,
-      "date": "2025-01-15",
+      "date": 20250115,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -234,7 +234,7 @@
       "title": "월급",
       "memo": "2월 급여",
       "amount": 2299375,
-      "date": "2025-01-11",
+      "date": 20250111,
       "type": "INCOME",
       "category_id": 3
     },
@@ -243,7 +243,7 @@
       "title": "월급",
       "memo": "1월 급여",
       "amount": 2433145,
-      "date": "2025-04-04",
+      "date": 20250404,
       "type": "INCOME",
       "category_id": 3
     },
@@ -252,7 +252,7 @@
       "title": "월급",
       "memo": "4월 급여",
       "amount": 2288062,
-      "date": "2025-03-03",
+      "date": 20250303,
       "type": "INCOME",
       "category_id": 3
     },
@@ -261,7 +261,7 @@
       "title": "월급",
       "memo": "2월 급여",
       "amount": 2079620,
-      "date": "2025-02-24",
+      "date": 20250224,
       "type": "INCOME",
       "category_id": 3
     },
@@ -270,7 +270,7 @@
       "title": "버스비",
       "memo": "야근 후 귀가",
       "amount": 22964,
-      "date": "2025-04-07",
+      "date": 20250407,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -279,7 +279,7 @@
       "title": "선물",
       "memo": "자기계발",
       "amount": 7396,
-      "date": "2024-12-18",
+      "date": 20241218,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -288,7 +288,7 @@
       "title": "기타 지출",
       "memo": "자기계발",
       "amount": 19980,
-      "date": "2025-03-03",
+      "date": 20250303,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -297,7 +297,7 @@
       "title": "버스비",
       "memo": "출근길",
       "amount": 12607,
-      "date": "2025-02-17",
+      "date": 20250217,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -306,7 +306,7 @@
       "title": "월급",
       "memo": "1월 급여",
       "amount": 2493843,
-      "date": "2025-01-25",
+      "date": 20250125,
       "type": "INCOME",
       "category_id": 3
     },
@@ -315,7 +315,7 @@
       "title": "저녁 식사",
       "memo": "회식",
       "amount": 17866,
-      "date": "2025-01-22",
+      "date": 20250122,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -324,7 +324,7 @@
       "title": "지하철",
       "memo": "퇴근길",
       "amount": 28279,
-      "date": "2025-03-14",
+      "date": 20250314,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -333,7 +333,7 @@
       "title": "기타 지출",
       "memo": "지인 생일",
       "amount": 25729,
-      "date": "2025-04-07",
+      "date": 20250407,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -342,7 +342,7 @@
       "title": "월급",
       "memo": "3월 급여",
       "amount": 2182703,
-      "date": "2025-01-29",
+      "date": 20250129,
       "type": "INCOME",
       "category_id": 3
     },
@@ -351,7 +351,7 @@
       "title": "기타 지출",
       "memo": "충동 구매",
       "amount": 2200,
-      "date": "2024-12-09",
+      "date": 20241209,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -360,7 +360,7 @@
       "title": "도서 구입",
       "memo": "충동 구매",
       "amount": 6981,
-      "date": "2025-01-17",
+      "date": 20250117,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -369,7 +369,7 @@
       "title": "카페",
       "memo": "친구와 식사",
       "amount": 2762,
-      "date": "2025-01-11",
+      "date": 20250111,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -378,7 +378,7 @@
       "title": "택시",
       "memo": "퇴근길",
       "amount": 12054,
-      "date": "2025-02-16",
+      "date": 20250216,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -387,7 +387,7 @@
       "title": "월급",
       "memo": "3월 급여",
       "amount": 2495941,
-      "date": "2025-01-31",
+      "date": 20250131,
       "type": "INCOME",
       "category_id": 3
     },
@@ -396,7 +396,7 @@
       "title": "도서 구입",
       "memo": "충동 구매",
       "amount": 23106,
-      "date": "2024-12-21",
+      "date": 20241221,
       "type": "EXPENDITURE",
       "category_id": 4
     },
@@ -405,7 +405,7 @@
       "title": "카페",
       "memo": "회식",
       "amount": 8111,
-      "date": "2025-03-26",
+      "date": 20250326,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -414,7 +414,7 @@
       "title": "저녁 식사",
       "memo": "스타벅스",
       "amount": 3387,
-      "date": "2025-01-14",
+      "date": 20250114,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -423,7 +423,7 @@
       "title": "카페",
       "memo": "회사 근처 식당",
       "amount": 10293,
-      "date": "2024-12-21",
+      "date": 20241221,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -432,7 +432,7 @@
       "title": "술",
       "memo": "스타벅스",
       "amount": 2738,
-      "date": "2025-02-03",
+      "date": 20250203,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -441,7 +441,7 @@
       "title": "월급",
       "memo": "3월 급여",
       "amount": 2426709,
-      "date": "2025-03-11",
+      "date": 20250311,
       "type": "INCOME",
       "category_id": 3
     },
@@ -450,7 +450,7 @@
       "title": "택시",
       "memo": "야근 후 귀가",
       "amount": 20472,
-      "date": "2025-01-06",
+      "date": 20250106,
       "type": "EXPENDITURE",
       "category_id": 2
     },
@@ -459,7 +459,7 @@
       "title": "점심 식사",
       "memo": "친구와 식사",
       "amount": 1252,
-      "date": "2025-01-30",
+      "date": 20250130,
       "type": "EXPENDITURE",
       "category_id": 1
     },
@@ -468,7 +468,7 @@
       "title": "점심 식사",
       "memo": "회사 근처 식당",
       "amount": 21204,
-      "date": "2024-12-04",
+      "date": 20241204,
       "type": "EXPENDITURE",
       "category_id": 1
     }
