@@ -23,12 +23,14 @@ export const useBudgetStore = defineStore('budgetStore', () => {
     }
   }
 
-  const getDaysInCurrentMonth = () => {
+  const getRemainingDaysInCurrentMonth = () => {
     const now = new Date()
     const year = now.getFullYear()
-    const month = now.getMonth() // 0-based (0 = January)
-    // 다음 달 0일 = 이번 달 마지막 날
-    return new Date(year, month + 1, 0).getDate()
+    const month = now.getMonth()
+    const today = now.getDate()
+
+    const lastDayOfMonth = new Date(year, month + 1, 0).getDate()
+    return lastDayOfMonth - today
   }
 
   const fetchMonthlyExpenditure = async () => {
@@ -66,8 +68,9 @@ export const useBudgetStore = defineStore('budgetStore', () => {
 
     remainingBudget.value = monthlyBudget.value - monthlyExpenditure.value
 
-    const days = getDaysInCurrentMonth()
-    dailyRemainingBudget.value = days > 0 ? Math.floor(remainingBudget.value / days) : 0
+    const remainingDays = getRemainingDaysInCurrentMonth()
+    dailyRemainingBudget.value =
+      remainingDays > 0 ? Math.floor(remainingBudget.value / remainingDays) : 0
     weeklyRemainingBudget.value = dailyRemainingBudget.value * 7
   }
 
