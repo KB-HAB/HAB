@@ -132,6 +132,27 @@ export const useTransactionStore = defineStore('transactions', {
       }
     },
 
+    async fetchRecentTransactions(limit = 5) {
+      this.loading = true
+      this.error = null
+
+      try {
+        const allTransactions = await fetchTransactions({
+          _sort: 'date',
+          _order: 'desc',
+          _limit: limit,
+        })
+
+        return allTransactions
+      } catch (error) {
+        this.error = error.message || '최근 거래 내역을 불러오는데 실패했습니다.'
+        console.error('Failed to fetch recent transactions:', error)
+        return []
+      } finally {
+        this.loading = false
+      }
+    },
+
     setFilter(filterType, value) {
       // 날짜 필터인 경우, Date 객체를 정수로 변환
       if (filterType === 'dateRange' && Array.isArray(value) && value.length === 2) {

@@ -117,7 +117,7 @@ export const dateToInt = (date) => {
 export const intToDate = (intDate) => {
   const strDate = String(intDate)
   const year = parseInt(strDate.substring(0, 4))
-  const month = parseInt(strDate.substring(4, 6)) - 1 // 0부터 시작
+  const month = parseInt(strDate.substring(4, 6)) - 1
   const day = parseInt(strDate.substring(6, 8))
   return new Date(year, month, day)
 }
