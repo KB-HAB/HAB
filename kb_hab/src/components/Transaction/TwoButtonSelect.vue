@@ -37,9 +37,9 @@ const getButtonClass = (option) => {
 }
 
 const handleClick = (option) => {
-  emit('update:modelValue', option)
+  const newValue = isSelected(option) ? '' : option
+  emit('update:modelValue', newValue) // 버튼 재클릭시 선택 취소
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
