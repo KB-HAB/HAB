@@ -9,9 +9,9 @@
       v-bind="$attrs"
     />
     <!-- 오른쪽에 만원 단위로 변환된 값 표시 -->
-    <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-600">
+    <!-- <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-600">
       {{ convertedValue }}
-    </span>
+    </span> -->
   </div>
 </template>
 
@@ -48,7 +48,7 @@ watch(
   (val) => {
     formattedValue.value = formatNumber(val)
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 // 입력 처리 함수
@@ -64,10 +64,11 @@ const handleInput = (e) => {
 }
 
 // modelValue를 만원 단위 문자열로 변환하는 computed
-const convertedValue = computed(() => {
-  if (!props.modelValue) return ''
-  const mValue = props.modelValue / 10000
+// const convertedValue = computed(() => {
+//   if (!props.modelValue) return ''
+//   const mValue = props.modelValue / 10000
 
-  return `${mValue.toFixed(0)}만원`
-})
+//   return `${mValue.toFixed(0)}만원`
+// })
+//
 </script>

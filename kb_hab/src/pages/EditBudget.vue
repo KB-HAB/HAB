@@ -1,16 +1,7 @@
 <template>
-  <div class="min-h-screen bg-white px-4 py-6 flex flex-col">
-    <!-- Header -->
-    <header class="flex items-center gap-2 mb-6">
-      <House class="w-5 h-5 cursor-pointer" @click="goBack" />
-      <h1 class="text-lg font-bold">월 예산 설정</h1>
-    </header>
+  <div class="min-h-screen p-4 flex flex-col">
+    <GoBackHeaderLayout title="월 예산 설정" />
 
-    <div>
-      <br />
-    </div>
-
-    <!-- Body -->
     <main class="flex-1 flex flex-col justify-between">
       <div>
         <label class="block font-bold mb-2">월 예산 (원)</label>
@@ -34,6 +25,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { updateBudgetMonthly } from '@/api/user'
+
+import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
 import PriceInput from '@/components/common/PriceInput.vue'
 import { Pencil, House } from 'lucide-vue-next'
@@ -46,30 +40,15 @@ const goBack = () => {
   router.back()
 }
 
-// 예산 업데이트 함수
 const saveBudget = async () => {
   try {
-    // json-server에서 단일 유저 업데이트: /users/1 (user id 가 "1"인 유저)
-    const response = await axios.patch('/users/1', {
-      budget_monthly: budget.value
-    })
+    await updateBudgetMonthly(1, budget.value) // ← 단일 유저 id: 1
 
-    if (response.status === 200) {
-      alert(`예산이 저장되었습니다: ${budget.value.toLocaleString()}원`)
-      router.push('/setting')
-    } else {
-      alert('예산 저장에 실패했습니다.')
-    }
+    alert(`예산이 저장되었습니다: ${budget.value.toLocaleString()}원`)
+    router.push('/setting')
   } catch (error) {
     alert('예산 저장 중 오류가 발생했습니다.')
     console.error('Error saving budget:', error)
   }
 }
 </script>
-
-<style scoped>
-/* 스타일은 필요에 따라 작성 */
-input:focus {
-  outline: none;
-}
-</style>
