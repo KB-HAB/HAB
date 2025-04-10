@@ -3,7 +3,12 @@
   <div class="p-8 space-y-2">
     <!-- 하루 쓸수 있는 돈 -->
     <div class="h-[102px]">
-      <HomeCard :title="cardTitle" bgColor="bg-[#6AA25A]" textColor="text-white" />
+      <HomeCard
+        :title="cardTitle"
+        bgColor="bg-[#6AA25A]"
+        textColor="text-white"
+        :amount="budgetStore.getDailyRemainingBudget().value"
+      />
     </div>
 
     <!-- 일주일/남은돈 -->
@@ -11,18 +16,26 @@
       <!-- 일주일 -->
       <HomeCard
         title="일주일"
-        :amount="weeklyAmount"
+        :amount="budgetStore.getWeeklyRemainingBudget().value"
         bgColor="bg-[#4B4B4B]"
         textColor="text-white"
       />
       <!-- 남은 돈 -->
       <HomeCard
         title="남은 돈"
-        :amount="remainingAmount"
+        :amount="budgetStore.getRemainingBudget().value"
         bgColor="bg-[#F8F8F8]"
         textColor="text-black"
         :iconButton="{ icon: Pencil, onClick: handleEditBudget }"
-      />
+      >
+        <div class="flex gap-1 text-sm">
+          <span class="text-[#6AA25A]"
+            >{{ budgetStore.getMonthlyBudget().value.toLocaleString() }}원</span
+          ><span class="text-red-700"
+            >- {{ budgetStore.getMonthlyExpenditure().value.toLocaleString() }}원</span
+          >
+        </div>
+      </HomeCard>
     </div>
 
     <!-- 수입 / 지출 요약 -->
@@ -52,16 +65,17 @@ import { Pencil, ChevronRight } from 'lucide-vue-next'
 
 import HomeCard from '@/components/home/HomeCard.vue'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
-import NavBar from '@/components/layout/NavBar.vue'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
 import MonthlyCard from '@/components/home/MonthlyCard.vue'
 
 import { useUserStore } from '@/stores/userStore'
 import { useTransactionStore } from '@/api/transaction-store'
+import { useBudgetStore } from '@/stores/budgetStore.js'
 
 const router = useRouter()
 const userStore = useUserStore()
 const transactionStore = useTransactionStore()
+const budgetStore = useBudgetStore()
 
 // 마운트 시 사용자 정보 가져오기 (선택)
 onMounted(() => {
@@ -69,6 +83,7 @@ onMounted(() => {
     userStore.fetchUser(1)
   }
   loadRecentTransactions()
+  budgetStore.initBudget()
 })
 
 // 제목 생성
@@ -86,16 +101,6 @@ const gotoHistory = () => {
 const goToDetail = (id) => {
   router.push(`/transactions/${id}`)
 }
-
-const dailyAmount = ref(0)
-const weeklyAmount = ref(0)
-
-// 남은 돈 계산
-const remainingAmount = computed(() => {
-  const budget = userStore.budgetMonthly
-  const spent = 10000 // ← EXPENDITURE로 대체 예정
-  return budget - spent
-})
 
 // 거래
 
