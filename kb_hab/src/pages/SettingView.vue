@@ -1,8 +1,7 @@
 <template>
-    <!-- Header -->
-  <HeaderLayout />
-
   <div class="flex flex-col min-h-screen bg-white px-6 pb-24">
+    <!-- Header -->
+    <header class="text-lg font-bold mb-6">HAB</header>
 
     <!-- Body -->
     <main class="flex flex-col gap-6">
@@ -74,8 +73,7 @@ import axios from 'axios'
 // 기존에 사용하던 아이콘들
 import { Pencil, Trash2, HandCoins } from 'lucide-vue-next'
 // 새 내비게이션에 사용할 아이콘들
-import NavBar from "@/components/layout/NavBar.vue";
-import HeaderLayout from "@/components/layout/HeaderLayout.vue";
+import NavBar from '@/components/layout/NavBar.vue'
 
 const router = useRouter()
 
