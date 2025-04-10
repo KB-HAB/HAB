@@ -5,7 +5,13 @@ import {
   fetchTransactionsByDateRange,
   dateToInt,
   fetchTransactionsByMonth,
+  fetchTransaction,
+  createTransaction,
+  putTransaction,
+  deleteTransaction,
 } from '@/api/TransactionApi'
+import { formatDateToDashed, formatDateToInt } from '@/utils/dateFormatUtils'
+import { toRaw } from 'vue'
 
 export const useTransactionStore = defineStore('transactions', {
   state: () => ({
@@ -126,6 +132,27 @@ export const useTransactionStore = defineStore('transactions', {
       }
     },
 
+    async fetchRecentTransactions(limit = 5) {
+      this.loading = true
+      this.error = null
+
+      try {
+        const allTransactions = await fetchTransactions({
+          _sort: 'date',
+          _order: 'desc',
+          _limit: limit,
+        })
+
+        return allTransactions
+      } catch (error) {
+        this.error = error.message || '최근 거래 내역을 불러오는데 실패했습니다.'
+        console.error('Failed to fetch recent transactions:', error)
+        return []
+      } finally {
+        this.loading = false
+      }
+    },
+
     setFilter(filterType, value) {
       // 날짜 필터인 경우, Date 객체를 정수로 변환
       if (filterType === 'dateRange' && Array.isArray(value) && value.length === 2) {
@@ -176,6 +203,49 @@ export const useTransactionStore = defineStore('transactions', {
     setItemsPerPage(count) {
       this.pagination.itemsPerPage = count
       this.resetPagination()
+    },
+
+    async fetchSingleTransaction(id) {
+      try {
+        const response = await fetchTransaction(id)
+        response.date = formatDateToDashed(response.date) // 20240101 -> 2024-01-01
+        return response
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async saveTransaction(transaction) {
+      try {
+        const raw = { ...toRaw(transaction) }
+        raw.date = formatDateToInt(raw.date)
+        const response = await createTransaction(raw)
+        return response
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async editSingleTransaction(id, transaction) {
+      try {
+        const raw = { ...toRaw(transaction) }
+        raw.date = formatDateToInt(raw.date)
+        return await putTransaction(id, raw)
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async deleteSingleTransaction(id) {
+      try {
+        await deleteTransaction(id)
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
     },
   },
 })

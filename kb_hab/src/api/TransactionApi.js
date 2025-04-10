@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const BASE_URL = 'http://localhost:3000'
+
 export const fetchTransactions = async (params = {}) => {
   try {
     const response = await axios.get('api/transactions', { params })
@@ -12,7 +14,7 @@ export const fetchTransactions = async (params = {}) => {
 
 export const fetchTransaction = async (id) => {
   try {
-    const response = await axios.get(`api/transactions/${id}`)
+    const response = await axios.get(BASE_URL + `/transactions/${id}`)
     return response.data
   } catch (error) {
     console.error(`Error fetching transaction with id ${id}:`, error)
@@ -115,7 +117,40 @@ export const dateToInt = (date) => {
 export const intToDate = (intDate) => {
   const strDate = String(intDate)
   const year = parseInt(strDate.substring(0, 4))
-  const month = parseInt(strDate.substring(4, 6)) - 1 // 0부터 시작
+  const month = parseInt(strDate.substring(4, 6)) - 1
   const day = parseInt(strDate.substring(6, 8))
   return new Date(year, month, day)
+}
+
+// 거래 생성
+export const createTransaction = async (transaction) => {
+  try {
+    const response = await axios.post(BASE_URL + '/transactions', transaction)
+    return response.data
+  } catch (err) {
+    console.error('TransactionApi: createTransaction', err)
+    throw err
+  }
+}
+
+// 거래 수정
+export const putTransaction = async (id, transaction) => {
+  try {
+    const response = await axios.put(BASE_URL + `/transactions/${id}`, transaction)
+    return response.data
+  } catch (err) {
+    console.error('TransactionApi: editTransaction', err)
+    throw err
+  }
+}
+
+// 거래 삭제
+export const deleteTransaction = async (id) => {
+  try {
+    const response = await axios.delete(BASE_URL + `/transactions/${id}`)
+    return response.data
+  } catch (err) {
+    console.error('TransactionApi: deleteTransaction', err)
+    throw err
+  }
 }
