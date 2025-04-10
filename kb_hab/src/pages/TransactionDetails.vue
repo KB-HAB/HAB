@@ -1,29 +1,24 @@
 <template>
   <div class="p-4">
     <!-- Header: 뒤로가기 버튼 -->
-    <header class="flex items-center gap-2 mb-6">
-      <button @click="handleBack" class="p-2 hover:bg-gray-100 rounded-full">
-        <ChevronLeft class="w-5 h-5" />
-      </button>
-    </header>
+    <GoBackHeaderLayout :title="''" @goBack="handleBack" />
 
     <!-- Body: 입력 폼 -->
     <div class="mt-6 space-y-6">
       <!-- 날짜 선택 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">날짜</label>
+        <label class="text-base font-bold flex items-center mb-3">날짜</label>
         <el-date-picker
           v-model="transaction.date"
           type="date"
-          value-format="yyyy-MM-dd"
-          prefix-icon="Calendar"
           placeholder="날짜를 선택하세요"
+          value-format="YYYY-MM-DD"
         />
       </div>
 
       <!-- 거래 이름 입력 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">거래 이름</label>
+        <label class="text-base font-bold flex items-center mb-3">거래 이름</label>
         <InputWithLength
           v-model="transaction.name"
           placeholder="거래 이름을 입력하세요"
@@ -34,7 +29,7 @@
 
       <!-- 메모 입력 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">메모</label>
+        <label class="text-base font-bold flex items-center mb-3">메모</label>
         <InputWithLength
           v-model="transaction.memo"
           placeholder="메모를 입력하세요"
@@ -45,39 +40,29 @@
 
       <!-- 가격 입력 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">가격(원)</label>
-        <PriceInput
-          v-model="transaction.amount"
-          placeholder="가격을 입력하세요"
-          class="w-full"
-        />
+        <label class="text-base font-bold flex items-center mb-3">가격(원)</label>
+        <PriceInput v-model="transaction.amount" placeholder="가격을 입력하세요" class="w-full" />
       </div>
 
       <!-- 거래 구분 선택 (수입/지출) -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">구별</label>
-        <TwoButtonSelect
-          v-model="transaction.type"
-          :leftOption="'수입'"
-          :rightOption="'지출'"
-        />
+        <label class="text-base font-bold flex items-center mb-3">구별</label>
+        <TwoButtonSelect v-model="transaction.type" :leftOption="'수입'" :rightOption="'지출'" />
       </div>
 
       <!-- 카테고리 선택 -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">카테고리</label>
-        <select
-          v-model="transaction.category"
-          class="w-full px-4 py-2 bg-gray-100 rounded-xl text-gray-800 focus:outline-none"
-        >
-          <option value="" disabled>카테고리를 선택하세요</option>
-          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-            {{ cat.name }}
-          </option>
-        </select>
+      <label class="text-base font-bold flex items-center mb-3">카테고리</label>
+      <div class="flex flex-wrap gap-2">
+        <CategoryButton
+          v-for="id in 17"
+          :key="id"
+          :categoryId="id"
+          :selected="transaction.category === id"
+          @click="updateCategory(id)"
+        />
       </div>
 
-      <!-- 버튼 영역: 삭제하기 / 저장하기 -->
+      <!-- 버튼 영역: 삭제하기 / 수정하기 -->
       <div class="flex justify-between mt-8 gap-4">
         <!-- 삭제하기 버튼 -->
         <CommonButton
@@ -87,20 +72,21 @@
         >
           삭제하기
         </CommonButton>
-        <!-- 저장하기 버튼 -->
+        <!-- 수정하기 버튼 -->
         <CommonButton
           variant="black"
+          :disabled="!canSave"
           :class="[saveButtonClasses, 'w-full', 'justify-center']"
           @click="openSaveDialog = true"
         >
-          저장하기
+          수정하기
         </CommonButton>
       </div>
     </div>
 
     <!-- 삭제 확인 다이얼로그 -->
     <el-dialog v-model="openDeleteDialog" title="경고" width="300px">
-      <span>정말 삭제하시겠습니까?</span>
+      <span>삭제하시겠습니까?</span>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="openDeleteDialog = false">취소</el-button>
@@ -109,9 +95,9 @@
       </template>
     </el-dialog>
 
-    <!-- 저장 확인 다이얼로그 -->
-    <el-dialog v-model="openSaveDialog" title="저장 확인" width="300px">
-      <span>수정된 내역을 저장하시겠습니까?</span>
+    <!-- 수정 확인 다이얼로그 -->
+    <el-dialog v-model="openSaveDialog" title="수정 확인" width="300px">
+      <span>거래 내역을 수정하시겠습니까?</span>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="openSaveDialog = false">취소</el-button>
@@ -123,21 +109,24 @@
 </template>
 
 <script setup>
-import { reactive, computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { ChevronLeft } from 'lucide-vue-next'
+import { reactive, computed, ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-// 컴포넌트 임포트 (최신 트리 구조에 맞춤)
+import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
 import InputWithLength from '@/components/common/InputWithLength.vue'
 import PriceInput from '@/components/common/PriceInput.vue'
 import TwoButtonSelect from '@/components/Transaction/TwoButtonSelect.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
+import CategoryButton from '@/components/common/CategoryButton.vue'
+
+import { dummyTransactions } from '@/data/transactions.js'
 
 const router = useRouter()
+const route = useRoute()
 
-// 거래 데이터
+// 거래 데이터 초기값
 const transaction = reactive({
-  date: new Date().toISOString().slice(0, 10),
+  date: '',
   name: '',
   memo: '',
   amount: 0,
@@ -145,38 +134,54 @@ const transaction = reactive({
   category: '',
 })
 
-// 예제용 카테고리 목록
-const categories = [
-  { id: 1, name: '식비' },
-  { id: 2, name: '교통' },
-  { id: 3, name: '쇼핑' },
-]
+// axios 통해서 데이터 가져오기 GET /transactions/:id
+onMounted(() => {
+  const transactionId = route.params.id
+  const foundTransaction = dummyTransactions.value.find((tx) => tx.id === Number(transactionId))
+
+  if (foundTransaction) {
+    transaction.date = foundTransaction.date
+    transaction.name = foundTransaction.title
+    transaction.memo = foundTransaction.memo || ''
+    transaction.amount = foundTransaction.amount
+    transaction.type = foundTransaction.type
+    transaction.category = foundTransaction.category
+
+    // 깊은 복사를 통해 초기값을 설정
+    initialTransaction.value = JSON.parse(JSON.stringify(transaction))
+  }
+})
 
 // 뒤로 가기 핸들러
 const handleBack = () => {
   router.back()
 }
 
-// 초기 날짜를 저장하여 날짜 변경 여부 판단
-const originalDate = ref(transaction.date)
+// 수정 전 값을 저장
+const initialTransaction = ref({ ...transaction })
 
-// 수정 내역 여부
+// 수정 여부 체크: 초기 값과 비교하여 변경된 필드만 체크
 const isModified = computed(() => {
   return (
-    transaction.name !== '' ||
-    transaction.memo !== '' ||
-    transaction.amount !== 0 ||
-    transaction.type !== '' ||
-    transaction.date !== originalDate.value ||
-    transaction.category !== ''
+    transaction.name !== initialTransaction.value.name ||
+    transaction.memo !== initialTransaction.value.memo ||
+    transaction.amount !== initialTransaction.value.amount ||
+    transaction.type !== initialTransaction.value.type ||
+    transaction.date !== initialTransaction.value.date ||
+    transaction.category !== initialTransaction.value.category
   )
 })
 
-const saveButtonClasses = computed(() => {
-  return isModified.value ? '' : 'opacity-50 cursor-not-allowed'
+// 수정된 값이 있으면 저장 버튼 활성화
+const canSave = computed(() => {
+  return isModified.value
 })
 
-// 삭제 및 저장 다이얼로그 상태 관리
+const saveButtonClasses = computed(() => {
+  return canSave.value ? '' : 'opacity-50 cursor-not-allowed'
+})
+
+// 삭제 및 수정 다이얼로그 상태 관리
 const openDeleteDialog = ref(false)
 const openSaveDialog = ref(false)
 
@@ -187,16 +192,19 @@ const confirmDelete = () => {
   router.push('/transactions')
 }
 
-// 저장 확인 후 처리 함수
+// 수정 확인 후 처리 함수
 const confirmSave = () => {
   openSaveDialog.value = false
-  alert('저장되었습니다.')
+  // 수정 확인용
+  console.log('Modified Transaction Data: ', transaction)
+  alert('수정되었습니다.')
+}
+
+// 카테고리 선택 업데이트 함수
+const updateCategory = (id) => {
+  // 이미 선택된 카테고리를 다시 클릭하면 취소
+  transaction.category = transaction.category === id ? '' : id
 }
 </script>
 
-<style scoped>
-.custom-datepicker {
-  background-color: white;
-  width: 240px;
-}
-</style>
+<style scoped></style>
