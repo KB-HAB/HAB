@@ -4,7 +4,9 @@
     <header class="flex items-center justify-between mb-4">
       <h1 class="text-lg font-bold">프로필 수정</h1>
     </header>
-
+    <div>
+      <br />
+    </div>
     <!-- 본문 영역 -->
     <main class="flex-1 flex flex-col gap-6">
       <!-- 닉네임 필드 -->
