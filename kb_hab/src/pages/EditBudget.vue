@@ -6,6 +6,10 @@
       <h1 class="text-lg font-bold">월 예산 설정</h1>
     </header>
 
+    <div>
+      <br />
+    </div>
+
     <!-- Body -->
     <main class="flex-1 flex flex-col justify-between">
       <div>
