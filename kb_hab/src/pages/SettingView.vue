@@ -48,9 +48,6 @@
       <a href="#" class="inline-flex items-center gap-1 hover:text-black">GitHub</a>
     </footer>
 
-    <!-- Bottom Nav: 새 내비게이션 -->
-    <NavBar />
-
     <!-- 삭제 확인 다이얼로그 -->
     <el-dialog v-model="openDialog" title="경고" width="300px">
       <span>정말 삭제하시겠습니까?</span>
