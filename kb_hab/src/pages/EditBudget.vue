@@ -3,12 +3,10 @@
     <GoBackHeaderLayout title="월 예산 설정" />
 
     <main class="flex-1 flex flex-col justify-between">
-      <div>
-        <label class="block font-bold mb-2">월 예산 (원)</label>
-        <PriceInput v-model="budget" placeholder="예: 500,000" />
+      <div class="p-4">
+        <span class="mb-2">수정할 금액을 입력해주세요 </span><PriceInput v-model="budget" />
       </div>
 
-      <!-- Footer 버튼 영역 -->
       <div class="flex justify-between mt-10 gap-4">
         <CommonButton variant="white" :onClick="goBack" class="w-full justify-center">
           취소
@@ -20,7 +18,6 @@
       </div>
     </main>
 
-    <!-- 저장 확인 다이얼로그 -->
     <el-dialog v-model="openDialog" title="저장 확인" width="300px">
       <span>예산을 저장하시겠습니까?</span>
       <template #footer>
@@ -39,17 +36,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { updateBudgetMonthly } from '@/api/user'
+import { updateBudgetMonthly, getUser } from '@/api/user'
 
 import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
 import PriceInput from '@/components/common/PriceInput.vue'
-import { Pencil, House } from 'lucide-vue-next'
-import axios from 'axios'
+import { Pencil } from 'lucide-vue-next'
 
 const router = useRouter()
+
 const budget = ref()
 const openDialog = ref(false)
 
@@ -65,11 +62,19 @@ const confirmSave = async () => {
   openDialog.value = false
   try {
     await updateBudgetMonthly(1, budget.value)
-
     router.push('/setting')
   } catch (error) {
     alert('예산 저장 중 오류가 발생했습니다.')
-    console.error('Error saving budget:', error)
+    console.error(error)
   }
 }
+
+onMounted(async () => {
+  try {
+    const user = await getUser(1)
+    budget.value = user.budgetMonthly ?? 0
+  } catch (err) {
+    console.error('유저 정보 가져오기 실패:', err)
+  }
+})
 </script>

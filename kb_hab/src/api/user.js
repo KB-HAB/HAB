@@ -31,19 +31,10 @@ export const updateUserProfile = async (id, { nickname, email }) => {
   const res = await axios.patch(`${BASE}/${id}`, { nickname, email })
   return res.data
 }
+
 // [PATCH] 예산만 수정
 export const updateBudgetMonthly = async (id, budgetMonthly) => {
   const res = await axios.patch(`${BASE}/${id}`, { budgetMonthly })
-  return res.data
-}
-
-// [PUT] 유저 데이터 초기화
-export const resetUserData = async (id) => {
-  const res = await axios.put(`${BASE}/${id}`, {
-    nickname: '',
-    email: '',
-    budgetMonthly: 0,
-  })
   return res.data
 }
 
