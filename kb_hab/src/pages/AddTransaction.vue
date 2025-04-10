@@ -69,7 +69,7 @@
           v-for="id in 17"
           :key="id"
           :categoryId="id"
-          :selected="transaction.category === id"
+          :selected="transaction.category_id === id"
           @click="updateCategory(id)"
         />
       </div>
@@ -107,9 +107,8 @@
 
 <script setup>
 import { reactive, computed, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
 import InputWithLength from '@/components/common/InputWithLength.vue'
 import PriceInput from '@/components/common/PriceInput.vue'
 import TwoButtonSelect from '@/components/Transaction/TwoButtonSelect.vue'
@@ -119,7 +118,6 @@ import CategoryButton from '@/components/common/CategoryButton.vue'
 import { useTransactionStoreAdapter } from '@/stores/transactionStoreAdapter'
 
 const router = useRouter()
-const route = useRoute()
 
 // 거래 데이터 초기값
 const transaction = reactive({
@@ -128,15 +126,10 @@ const transaction = reactive({
   memo: '',
   amount: 0,
   type: '',
-  category: '',
+  category_id: '',
 })
 
 const { saveTransaction } = useTransactionStoreAdapter()
-
-// 뒤로가기
-const handleBack = () => {
-  router.back()
-}
 
 // 필수 필드가 모두 채워졌는지 확인
 const canSave = computed(() => {
@@ -145,7 +138,7 @@ const canSave = computed(() => {
     transaction.title.trim() !== '' &&
     transaction.amount > 0 &&
     transaction.type.trim() !== '' &&
-    transaction.category !== ''
+    transaction.category_id !== ''
   )
 })
 
@@ -182,7 +175,7 @@ const confirmSave = async () => {
 
 // 카테고리 선택 업데이트 함수
 const updateCategory = (id) => {
-  transaction.category = id
+  transaction.category_id = id
 }
 </script>
 

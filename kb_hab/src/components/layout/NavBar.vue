@@ -27,7 +27,7 @@ import IconButton from '../common/IconButton.vue'
 const route = useRoute()
 
 // 표시할 경로 목록
-const visiblePaths = ['/', '/transactions/add', '/setting']
+const visiblePaths = ['/', '/transactions', '/transactions/add', '/setting']
 
 // 현재 경로가 목록에 있는 경우만 표시
 const visible = computed(() => visiblePaths.includes(route.path))

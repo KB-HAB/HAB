@@ -61,7 +61,7 @@
           v-for="id in 17"
           :key="id"
           :categoryId="id"
-          :selected="transaction.category === id"
+          :selected="transaction.category_id === id"
           @click="updateCategory(id)"
         />
       </div>
@@ -144,7 +144,7 @@ const transaction = reactive({
   memo: '',
   amount: 0,
   type: '',
-  category: '',
+  category_id: 0,
 })
 
 const { getTransaction, deleteTransaction, editTransaction } = useTransactionStoreAdapter()
@@ -163,7 +163,7 @@ const fetchTransaction = async () => {
       transaction.memo = foundTransaction.memo || ''
       transaction.amount = foundTransaction.amount
       transaction.type = foundTransaction.type
-      transaction.category = foundTransaction.category
+      transaction.category_id = foundTransaction.category_id
     }
 
     // 깊은 복사를 통해 초기값을 설정
@@ -178,11 +178,6 @@ onMounted(() => {
   fetchTransaction()
 })
 
-// 뒤로 가기 핸들러
-const handleBack = () => {
-  router.back()
-}
-
 // 수정 전 값을 저장
 const initialTransaction = ref({ ...transaction })
 
@@ -194,7 +189,7 @@ const isModified = computed(() => {
     transaction.amount !== initialTransaction.value.amount ||
     transaction.type !== initialTransaction.value.type ||
     transaction.date !== initialTransaction.value.date ||
-    transaction.category !== initialTransaction.value.category
+    transaction.category_id !== initialTransaction.value.category_id
   )
 })
 
@@ -245,7 +240,7 @@ const confirmSave = async () => {
 // 카테고리 선택 업데이트 함수
 const updateCategory = (id) => {
   // 이미 선택된 카테고리를 다시 클릭하면 취소
-  transaction.category = transaction.category === id ? '' : id
+  transaction.category_id = transaction.category_id === id ? '' : id
 }
 </script>
 
