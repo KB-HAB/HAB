@@ -2,7 +2,7 @@
   <aside
     class="hidden lg:flex fixed top-0 left-0 h-screen w-[72px] flex-col items-center justify-between py-8"
   >
-    <div>HAB</div>
+    <div class="text-2xl" style="font-family: 'Cafe24Moyamoya-Regular-v1.0', sans-serif">HAB</div>
     <div class="flex flex-col items-center gap-14" center>
       <router-link to="/" class="text-black hover:opacity-70">
         <HomeIcon class="w-8 h-8" />
