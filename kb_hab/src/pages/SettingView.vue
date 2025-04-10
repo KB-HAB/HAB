@@ -1,8 +1,6 @@
 <template>
-    <!-- Header -->
-  <HeaderLayout />
-
   <div class="flex flex-col min-h-screen bg-white px-6 pb-24">
+    <HeaderLayout />
 
     <!-- Body -->
     <main class="flex flex-col gap-6">
@@ -74,8 +72,8 @@ import axios from 'axios'
 // 기존에 사용하던 아이콘들
 import { Pencil, Trash2, HandCoins } from 'lucide-vue-next'
 // 새 내비게이션에 사용할 아이콘들
-import NavBar from "@/components/layout/NavBar.vue";
-import HeaderLayout from "@/components/layout/HeaderLayout.vue";
+import NavBar from '@/components/layout/NavBar.vue'
+import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 
 const router = useRouter()
 
@@ -86,7 +84,7 @@ const user = reactive({ id: '', nickname: '', email: '' })
 // 컴포넌트가 마운트되면 API를 통해 유저 정보를 가져옴
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/users')
+    const response = await axios.get('http://localhost:3000/user')
     if (response.data && response.data.length > 0) {
       user.id = response.data[0].id
       user.nickname = response.data[0].nickname

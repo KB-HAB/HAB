@@ -8,15 +8,9 @@ export const getUser = async (id) => {
   return res.data
 }
 
-// [GET] 전체 유저 목록 조회 (필요할 경우)
-export const getAllUsers = async () => {
-  const res = await axios.get(BASE)
-  return res.data
-}
-
-// [POST] 유저 추가
-export const createUser = async (user) => {
-  const res = await axios.post(BASE, user)
+// [PATCH] 유저 일부 수정
+export const patchUser = async (id, data) => {
+  const res = await axios.patch(`${BASE}/${id}`, data)
   return res.data
 }
 
@@ -26,9 +20,30 @@ export const updateUser = async (id, user) => {
   return res.data
 }
 
-// [PATCH] 유저 일부 수정 (예: budget만)
-export const patchUser = async (id, data) => {
-  const res = await axios.patch(`${BASE}/${id}`, data)
+// [POST] 유저 추가
+export const createUser = async (user) => {
+  const res = await axios.post(BASE, user)
+  return res.data
+}
+
+// [PATCH] 닉네임 + 이메일 수정
+export const updateUserProfile = async (id, { nickname, email }) => {
+  const res = await axios.patch(`${BASE}/${id}`, { nickname, email })
+  return res.data
+}
+// [PATCH] 예산만 수정
+export const updateBudgetMonthly = async (id, budgetMonthly) => {
+  const res = await axios.patch(`${BASE}/${id}`, { budgetMonthly })
+  return res.data
+}
+
+// [PUT] 유저 데이터 초기화
+export const resetUserData = async (id) => {
+  const res = await axios.put(`${BASE}/${id}`, {
+    nickname: '',
+    email: '',
+    budgetMonthly: 0,
+  })
   return res.data
 }
 

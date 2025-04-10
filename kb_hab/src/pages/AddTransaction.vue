@@ -150,7 +150,6 @@ const confirmSave = () => {
   openSaveDialog.value = false
   // 저장 확인용
   console.log('Modified Transaction Data: ', transaction)
-  alert('새로운 거래가 저장되었습니다.')
 }
 
 // 카테고리 선택 업데이트 함수
