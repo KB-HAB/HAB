@@ -13,14 +13,14 @@
     </div>
 
     <div class="flex flex-col items-end gap-2 pt-1 pr-1">
-      <component :is="getCategoryIcon(transaction.category)" class="w-5 h-5 text-gray-500" />
+      <component :is="getCategoryIcon(transaction.category_id)" class="w-5 h-5 text-gray-500" />
       <div
         :class="[
           'text-base font-semibold',
-          transaction.type === '수입' ? 'text-[#6AA25A]' : 'text-black',
+          transaction.type === 'INCOME' ? 'text-[#6AA25A]' : 'text-black',
         ]"
       >
-        {{ transaction.type === '수입' ? '+' : '-' }}
+        {{ transaction.type === 'INCOME' ? '+' : '-' }}
         {{ Number(transaction.amount).toLocaleString() }} 원
       </div>
     </div>
@@ -63,12 +63,20 @@ const handleClick = () => {
   emit('click', props.transaction.id)
 }
 
-const formatDate = (dateStr) => {
-  const [year, month, day] = dateStr.split('-')
-  return `${month.padStart(2, '0')}.${day.padStart(2, '0')}`
+const formatDate = (dateInt) => {
+  // 정수를 문자열로 변환
+  const dateStr = String(dateInt)
+
+  // 문자열에서 년(0-3), 월(4-5), 일(6-7) 추출
+  const year = dateStr.substring(0, 4)
+  const month = dateStr.substring(4, 6)
+  const day = dateStr.substring(6, 8)
+
+  // 월.일 형식으로 반환
+  return `${month}.${day}`
 }
 
-const getCategoryIcon = (category) => {
+const getCategoryIcon = (category_id) => {
   const map = {
     1: Utensils,
     2: Coffee,
@@ -88,6 +96,6 @@ const getCategoryIcon = (category) => {
     16: HandCoins,
     17: PiggyBank,
   }
-  return map[category] || HelpCircle
+  return map[category_id] || HelpCircle
 }
 </script>

@@ -18,8 +18,10 @@ import { faUser, faEnvelope, faHouse } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faUser, faEnvelope, faHouse)
 const app = createApp(App)
+const pinia = createPinia()
 
-app.use(createPinia()).use(ElementPlus)
+app.use(pinia)
+app.use(ElementPlus)
 
 app.use(router).component('font-awesome-icon', FontAwesomeIcon)
 

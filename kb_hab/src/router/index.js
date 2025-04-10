@@ -8,6 +8,7 @@ import AddTransaction from '@/pages/AddTransaction.vue'
 import SettingView from '@/pages/SettingView.vue'
 import EditProfile from '@/pages/EditProfile.vue'
 import EditBudget from '@/pages/EditBudget.vue'
+import ApiDebug from '@/pages/ApiDebug.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +54,11 @@ const router = createRouter({
       path: '/setting/budget',
       name: 'editBudget',
       component: EditBudget,
+    },
+    {
+      path: '/test-api',
+      name: 'TestApi',
+      component: ApiDebug,
     },
   ],
 })
