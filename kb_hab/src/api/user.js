@@ -26,12 +26,11 @@ export const createUser = async (user) => {
   return res.data
 }
 
-// [PATCH] 닉네임만 수정
-export const updateNickname = async (id, nickname) => {
-  const res = await axios.patch(`${BASE}/${id}`, { nickname })
+// [PATCH] 닉네임 + 이메일 수정
+export const updateUserProfile = async (id, { nickname, email }) => {
+  const res = await axios.patch(`${BASE}/${id}`, { nickname, email })
   return res.data
 }
-
 // [PATCH] 예산만 수정
 export const updateBudgetMonthly = async (id, budgetMonthly) => {
   const res = await axios.patch(`${BASE}/${id}`, { budgetMonthly })

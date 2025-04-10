@@ -1,13 +1,7 @@
 <template>
-  <div class="min-h-screen bg-white px-4 py-6 flex flex-col">
+  <div class="min-h-screen p-4 flex flex-col">
+    <GoBackHeaderLayout title="프로필 수정" />
 
-    <!-- Header 영역 -->
-    <header class="flex items-center justify-between mb-4">
-      <h1 class="text-lg font-bold">프로필 수정</h1>
-    </header>
-    <div>
-      <br />
-    </div>
     <!-- 본문 영역 -->
     <main class="flex-1 flex flex-col gap-6">
       <!-- 닉네임 필드 -->
@@ -30,32 +24,44 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getUser, updateUserProfile } from '@/api/user'
+
+import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
 import NicknameInput from '@/components/NicknameInput.vue'
 import EmailInput from '@/components/EmailInput.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
 
 const router = useRouter()
 
-// v-model을 위한 상태 변수들
 const nickname = ref('')
 const email = ref('')
+
+onMounted(async () => {
+  try {
+    const data = await getUser(1)
+    nickname.value = data.nickname
+    email.value = data.email
+  } catch (err) {
+    console.error('유저 정보 가져오기 실패!:', err)
+  }
+})
 
 const cancelEdit = () => {
   console.log('취소 버튼 클릭')
   router.back()
 }
 
-const saveEdit = () => {
-  console.log('저장 버튼 클릭')
-  console.log('닉네임:', nickname.value)
-  console.log('이메일:', email.value)
-  // 실제 저장 로직이나 API 호출이 필요하면 여기에 추가하세요.
-  router.push({ name: 'setting' })
+const saveEdit = async () => {
+  try {
+    await updateUserProfile(1, {
+      nickname: nickname.value,
+      email: email.value,
+    })
+    router.push({ name: 'setting' })
+  } catch (err) {
+    console.error('수정 실패:', err)
+  }
 }
 </script>
-
-<style scoped>
-/* 필요에 따라 추가 스타일을 작성하세요 */
-</style>
