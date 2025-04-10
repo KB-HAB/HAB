@@ -9,6 +9,11 @@
         <span class="text-lg font-semibold">
           {{ displayDateLabel }}
         </span>
+        <p>
+          전체: {{ transactionStore.transactions.length }}, 필터됨:
+          {{ transactionStore.filteredTransactions.length }}
+        </p>
+
         <button
           v-if="!isFiltered"
           @click="goToNextMonth"
@@ -22,12 +27,88 @@
             <Filter class="w-5 h-5" />
           </button>
           <el-button type="danger" plain @click="resetFilters">필터 초기화</el-button>
+          <button @click="toggleDebug" class="text-xs text-gray-400">API 테스트</button>
         </div>
       </div>
 
+      <ApiDebug v-if="showDebug" @close="showDebug = false" />
+
+      <!-- 로딩 상태 -->
+      <div v-if="transactionStore.loading" class="py-8 text-center">
+        <p>데이터를 불러오는 중...</p>
+      </div>
+
+      <!-- 에러 상태 -->
+      <div v-else-if="transactionStore.error" class="py-8 text-center text-red-500">
+        <p>{{ transactionStore.error }}</p>
+        <p class="text-sm mt-2">JSON Server가 실행 중인지 확인하세요.</p>
+      </div>
+
+      <!-- 데이터 없음 -->
+      <div
+        v-else-if="transactionStore.filteredTransactions.length === 0"
+        class="py-8 text-center text-gray-500"
+      >
+        <p>거래 내역이 없습니다.</p>
+      </div>
+
       <!-- 거래카드 -->
-      <div style="background-color: #ffffff">
-        <TransactionItemList :transactions="filteredTransactions" @click="goToDetail" />
+      <div v-else style="background-color: #ffffff">
+        <TransactionItemList
+          :transactions="transactionStore.paginatedTransactions"
+          @click="goToDetail"
+        />
+
+        <!-- 디버깅 정보 -->
+        <div v-if="showDebug" class="my-2 p-2 bg-gray-100 text-xs">
+          <p>현재 페이지: {{ transactionStore.pagination.currentPage }}</p>
+          <p>총 페이지: {{ transactionStore.totalPages }}</p>
+          <p>항목 수: {{ transactionStore.filteredTransactions.length }}</p>
+        </div>
+
+        <!-- 페이지네이션 UI -->
+        <div
+          v-if="transactionStore.filteredTransactions.length > 0"
+          class="mt-4 flex justify-between items-center"
+        >
+          <div class="text-sm text-gray-500">
+            {{ transactionStore.filteredTransactions.length }}개 중
+            {{
+              (transactionStore.pagination.currentPage - 1) *
+                transactionStore.pagination.itemsPerPage +
+              1
+            }}-
+            {{
+              Math.min(
+                transactionStore.pagination.currentPage * transactionStore.pagination.itemsPerPage,
+                transactionStore.filteredTransactions.length,
+              )
+            }}
+          </div>
+
+          <div class="flex items-center gap-2">
+            <div class="mr-3">
+              <el-select
+                v-model="itemsPerPage"
+                size="small"
+                style="width: 100px"
+                @change="changeItemsPerPage"
+              >
+                <el-option label="10개씩" :value="10" />
+                <el-option label="20개씩" :value="20" />
+                <el-option label="5개씩" :value="5" />
+              </el-select>
+            </div>
+
+            <el-pagination
+              v-model:current-page="currentPage"
+              :page-count="transactionStore.totalPages"
+              layout="prev, pager, next"
+              background
+              @current-change="handlePageChange"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -73,8 +154,8 @@
         <label class="block mb-1 font-medium">수입/지출</label>
         <el-select v-model="tempType" placeholder="전체" class="w-full">
           <el-option label="전체" value="" />
-          <el-option label="수입" value="수입" />
-          <el-option label="지출" value="지출" />
+          <el-option label="수입" value="INCOME" />
+          <el-option label="지출" value="EXPENDITURE" />
         </el-select>
       </div>
 
@@ -88,53 +169,118 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { ChevronLeft, ChevronRight, Filter } from 'lucide-vue-next'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
-import { dummyTransactions } from '@/data/transactions.js'
+import ApiDebug from '@/pages/ApiDebug.vue'
 import { useRouter } from 'vue-router'
 import 'element-plus/es/components/button/style/css'
-import axios from 'axios'
+import 'element-plus/es/components/pagination/style/css'
+import 'element-plus/es/components/select/style/css'
+import { useTransactionStore } from '@/api/transaction-store'
+
+// 스토어 설정
+const transactionStore = useTransactionStore()
+
+// 디버그 토글
+const showDebug = ref(false)
+const toggleDebug = () => {
+  showDebug.value = !showDebug.value
+}
 
 const now = new Date()
 const selectedDate = ref(new Date())
-const selectedDateRange = ref([])
-const selectedCategory = ref('')
-const selectedType = ref('')
 const isFilterOpen = ref(false)
 
-// 임시 저장용
+// 필터 관련 상태
 const tempDateRange = ref([])
 const tempCategory = ref('')
 const tempType = ref('')
 
+// 페이지네이션 관련 상태
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
+
+// 컴포넌트 마운트 시 데이터 로드
+onMounted(async () => {
+  // 시작 시 모든 트랜잭션을 가져온 다음 필터링
+  await transactionStore.fetchAllTransactions()
+  // 현재 월에 해당하는 데이터만 필터링
+  await loadTransactionsForCurrentMonth()
+})
+
+// 선택한 날짜가 변경될 때 데이터 다시 로드
+watch(selectedDate, async () => {
+  if (!isFiltered.value) {
+    await loadTransactionsForCurrentMonth()
+  }
+})
+
+// 현재 페이지 변경 시 스토어의 페이지도 변경
+watch(currentPage, (newPage) => {
+  transactionStore.goToPage(newPage)
+})
+
+// 스토어의 현재 페이지가 변경되면 컴포넌트의 currentPage도 업데이트
+watch(
+  () => transactionStore.pagination.currentPage,
+  (newPage) => {
+    currentPage.value = newPage
+  },
+)
+
+// 현재 월의 트랜잭션 데이터 로드
+const loadTransactionsForCurrentMonth = async () => {
+  // 이미 모든 트랜잭션을 로드했으므로 해당 월 데이터만 필터링
+  await transactionStore.fetchTransactionsByMonth(currentYear.value, currentMonth.value)
+}
+
 const openFilterDialog = () => {
-  tempDateRange.value = selectedDateRange.value ? [...selectedDateRange.value] : []
-  tempCategory.value = selectedCategory.value
-  tempType.value = selectedType.value
+  tempDateRange.value = transactionStore.filters.dateRange.length
+    ? [...transactionStore.filters.dateRange]
+    : []
+  tempCategory.value = transactionStore.filters.category_id
+  tempType.value = transactionStore.filters.type
   isFilterOpen.value = true
 }
 
-const applyFilters = () => {
-  selectedDateRange.value = tempDateRange.value.map((d) => new Date(d))
-  selectedCategory.value = tempCategory.value
-  selectedType.value = tempType.value
+const applyFilters = async () => {
+  // 날짜 범위 필터 적용
+  if (tempDateRange.value?.length === 2) {
+    await transactionStore.fetchTransactionsByDateRange(
+      tempDateRange.value[0],
+      tempDateRange.value[1],
+    )
+    transactionStore.setFilter('dateRange', tempDateRange.value)
+  }
+
+  // 카테고리와 타입 필터 적용
+  transactionStore.setFilter('category_id', tempCategory.value)
+  transactionStore.setFilter('type', tempType.value)
+
   isFilterOpen.value = false
 }
 
-const resetFilters = () => {
-  selectedDateRange.value = []
-  selectedCategory.value = ''
-  selectedType.value = ''
+const resetFilters = async () => {
+  transactionStore.resetFilters()
+  await loadTransactionsForCurrentMonth()
+}
+
+const handlePageChange = (page) => {
+  transactionStore.goToPage(page)
+}
+
+const changeItemsPerPage = (value) => {
+  transactionStore.setItemsPerPage(value)
 }
 
 const currentYear = computed(() => selectedDate.value.getFullYear())
 const currentMonth = computed(() => selectedDate.value.getMonth() + 1)
 
 const displayDateLabel = computed(() => {
-  if (selectedDateRange.value.length === 2) {
-    const start = selectedDateRange.value[0]
-    const end = selectedDateRange.value[1]
+  if (transactionStore.filters.dateRange?.length === 2) {
+    const start = transactionStore.filters.dateRange[0]
+    const end = transactionStore.filters.dateRange[1]
     const format = (date) => `${date.getMonth() + 1}.${date.getDate()}`
     return `${format(start)} - ${format(end)}`
   }
@@ -158,71 +304,6 @@ const goToNextMonth = () => {
   }
 }
 
-const startOfDay = (date) => {
-  const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
-
-const endOfDay = (date) => {
-  const d = new Date(date)
-  d.setHours(23, 59, 59, 999)
-  return d
-}
-/*
-const filteredTransactions = computed(() => {
-  return dummyTransactions.value
-    .filter((tx) => {
-      const txDate = new Date(tx.date)
-
-      const matchesDateRange =
-        selectedDateRange.value.length === 2
-          ? txDate >= startOfDay(selectedDateRange.value[0]) &&
-            txDate <= endOfDay(selectedDateRange.value[1])
-          : txDate.getFullYear() === currentYear.value &&
-            txDate.getMonth() + 1 === currentMonth.value
-
-      const matchesCategory =
-        !selectedCategory.value || tx.category === Number(selectedCategory.value)
-
-      const matchesType = !selectedType.value || tx.type === selectedType.value
-
-      return matchesDateRange && matchesCategory && matchesType
-    })
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-})
-*/
-const filteredTransactions = computed(async () => {
-  const { data: dummyTransactions } = await axios.get('http://localhost:3000/transaction', {
-    params: {
-      _page: 1,
-      _per_page: 2,
-    },
-  })
-  console.log(filteredTransactions)
-  console.log('selectedDateRange:', selectedDateRange.value)
-
-  return dummyTransactions.data
-    .filter((tx) => {
-      const txDate = new Date(tx.date)
-
-      const matchesDateRange =
-        selectedDateRange.value.length === 2
-          ? txDate >= startOfDay(selectedDateRange.value[0]) &&
-            txDate <= endOfDay(selectedDateRange.value[1])
-          : txDate.getFullYear() === currentYear.value &&
-            txDate.getMonth() + 1 === currentMonth.value
-
-      const matchesCategory =
-        !selectedCategory.value || tx.category === Number(selectedCategory.value)
-
-      const matchesType = !selectedType.value || tx.type === selectedType.value
-
-      return matchesDateRange && matchesCategory && matchesType
-    })
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-})
-
 const router = useRouter()
 const goToDetail = (id) => {
   router.push(`/transactions/${id}`)
@@ -230,10 +311,14 @@ const goToDetail = (id) => {
 
 const categoryMap = {
   1: '식비',
-  2: '카페·간식',
-  3: '편의점·마트·잡화',
+  2: '교통비',
+  3: '월급',
   4: '술·유흥',
   5: '쇼핑',
+  6: '취미·여가',
+  7: '의료·건강·피트니스',
+  8: '주거·통신',
+  9: '보험·세금·기타금융',
   6: '취미·여가',
   7: '의료·건강·피트니스',
   8: '주거·통신',
@@ -248,5 +333,12 @@ const categoryMap = {
   17: '저축·투자',
 }
 
-const isFiltered = computed(() => selectedDateRange.value.length === 2)
+const isFiltered = computed(() => {
+  const filters = transactionStore.filters
+  return (
+    (filters.dateRange && filters.dateRange.length === 2) ||
+    filters.category_id !== '' ||
+    filters.type !== ''
+  )
+})
 </script>
