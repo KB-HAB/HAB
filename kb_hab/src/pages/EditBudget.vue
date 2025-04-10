@@ -13,12 +13,28 @@
         <CommonButton variant="white" :onClick="goBack" class="w-full justify-center">
           취소
         </CommonButton>
-        <CommonButton variant="black" :onClick="saveBudget" class="w-full justify-center">
+        <CommonButton variant="black" :onClick="openSaveDialog" class="w-full justify-center">
           <Pencil class="w-4 h-4" />
           저장하기
         </CommonButton>
       </div>
     </main>
+
+    <!-- 저장 확인 다이얼로그 -->
+    <el-dialog v-model="openDialog" title="저장 확인" width="300px">
+      <span>예산을 저장하시겠습니까?</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="openDialog = false">취소</el-button>
+          <el-button
+            @click="confirmSave"
+            style="background-color: #6aa25a; color: white; border: none"
+          >
+            저장
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -34,17 +50,22 @@ import { Pencil, House } from 'lucide-vue-next'
 import axios from 'axios'
 
 const router = useRouter()
-const budget = ref(500000)
+const budget = ref()
+const openDialog = ref(false)
 
 const goBack = () => {
   router.back()
 }
 
-const saveBudget = async () => {
-  try {
-    await updateBudgetMonthly(1, budget.value) // ← 단일 유저 id: 1
+const openSaveDialog = () => {
+  openDialog.value = true
+}
 
-    alert(`예산이 저장되었습니다: ${budget.value.toLocaleString()}원`)
+const confirmSave = async () => {
+  openDialog.value = false
+  try {
+    await updateBudgetMonthly(1, budget.value)
+
     router.push('/setting')
   } catch (error) {
     alert('예산 저장 중 오류가 발생했습니다.')

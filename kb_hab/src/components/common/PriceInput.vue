@@ -46,7 +46,7 @@ const formattedValue = ref('')
 watch(
   () => props.modelValue,
   (val) => {
-    formattedValue.value = formatNumber(val)
+    formattedValue.value = val === 0 ? '' : formatNumber(val)
   },
   { immediate: true },
 )
