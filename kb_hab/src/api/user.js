@@ -1,16 +1,11 @@
 import axios from 'axios'
 
 const BASE = 'http://localhost:3000/user'
+const BASE_TRANS = 'http://localhost:3000/transactions'
 
 // [GET] 특정 유저 조회 (id로)
 export const getUser = async (id) => {
   const res = await axios.get(`${BASE}/${id}`)
-  return res.data
-}
-
-// [GET] 전체 유저 목록 조회 (필요할 경우)
-export const getAllUsers = async () => {
-  const res = await axios.get(BASE)
   return res.data
 }
 
@@ -20,15 +15,15 @@ export const createUser = async (user) => {
   return res.data
 }
 
-// [PUT] 유저 전체 수정
-export const updateUser = async (id, user) => {
-  const res = await axios.put(`${BASE}/${id}`, user)
+// [PATCH] 닉네임 수정
+export const updateNickname = async (id, nickname) => {
+  const res = await axios.patch(`${BASE}/${id}`, { nickname })
   return res.data
 }
 
-// [PATCH] 유저 일부 수정 (예: budget만)
-export const patchUser = async (id, data) => {
-  const res = await axios.patch(`${BASE}/${id}`, data)
+// [PATCH] 월 예산 설정
+export const updateBudgetMonthly = async (id, budgetMonthly) => {
+  const res = await axios.patch(`${BASE}/${id}`, { budgetMonthly })
   return res.data
 }
 
@@ -36,4 +31,21 @@ export const patchUser = async (id, data) => {
 export const deleteUser = async (id) => {
   const res = await axios.delete(`${BASE}/${id}`)
   return res.data
+}
+
+// [PUT] 내 데이터 초기화 ( budgetMonthly 전부 초기화)
+export const resetUserData = async (id) => {
+  const res = await axios.put(`${BASE}/${id}`, {
+    nickname: '',
+    email: '',
+    budgetMonthly: 0,
+  })
+  return res.data
+}
+
+// [DELETE] 전체 거래 내역 초기화 (모두 삭제)
+export const resetTransactions = async () => {
+  const all = await axios.get(BASE_TRANS)
+  const deleteAll = all.data.map((tx) => axios.delete(`${BASE_TRANS}/${tx.id}`))
+  await Promise.all(deleteAll)
 }
