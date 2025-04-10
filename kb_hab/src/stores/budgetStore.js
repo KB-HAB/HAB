@@ -1,15 +1,18 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
 export const useBudgetStore = defineStore('budgetStore', () => {
   const BASE_URL = 'http://localhost:3000'
+
+  // state
   const remainingBudget = ref(0)
   const dailyRemainingBudget = ref(0)
   const weeklyRemainingBudget = ref(0)
   const monthlyExpenditure = ref(0)
   const monthlyBudget = ref(0)
 
+  // actions
   const fetchMonthlyBudget = async () => {
     try {
       const response = await axios.get(BASE_URL + '/user')
@@ -47,6 +50,8 @@ export const useBudgetStore = defineStore('budgetStore', () => {
         },
       })
 
+      // 2024-04-01 -> 20240401 timestamp :179800000
+
       // 총합 계산
       monthlyExpenditure.value = response.data.reduce((sum, tx) => sum + tx.amount, 0)
     } catch (err) {
@@ -62,16 +67,39 @@ export const useBudgetStore = defineStore('budgetStore', () => {
     remainingBudget.value = monthlyBudget.value - monthlyExpenditure.value
 
     const days = getDaysInCurrentMonth()
-    dailyRemainingBudget.value =
-      days > 0 ? Math.floor(remainingBudget.value / days) : 0
+    dailyRemainingBudget.value = days > 0 ? Math.floor(remainingBudget.value / days) : 0
     weeklyRemainingBudget.value = dailyRemainingBudget.value * 7
   }
 
+  //getters
+  function getMonthlyBudget() {
+    return computed(() => {
+      return monthlyBudget.value
+    })
+  }
+
+  function getRemainingBudget() {
+    return computed(() => {
+      return remainingBudget.value
+    })
+  }
+
+  function getDailyRemainingBudget() {
+    return computed(() => {
+      return dailyRemainingBudget.value
+    })
+  }
+
+  function getWeeklyRemainingBudget() {
+    return computed(() => {
+      return weeklyRemainingBudget.value
+    })
+  }
   return {
-    monthlyBudget,
-    remainingBudget,
-    dailyRemainingBudget,
-    weeklyRemainingBudget,
+    getMonthlyBudget,
+    getRemainingBudget,
+    getDailyRemainingBudget,
+    getWeeklyRemainingBudget,
     initBudget,
   }
 })
