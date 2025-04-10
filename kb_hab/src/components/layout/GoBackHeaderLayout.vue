@@ -19,7 +19,7 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="flex w-full h-[48px] items-center bg-white">
+  <div class="flex w-full h-[48px] items-center bg-white lg:hidden">
     <IconButton :onClick="handleClick">
       <ChevronLeft />
     </IconButton>

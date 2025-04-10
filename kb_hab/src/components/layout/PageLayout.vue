@@ -1,18 +1,14 @@
 <template>
   <div class="min-h-screen flex bg-gray-100">
     <!-- 데스크탑 전용 사이드바 -->
-    <aside class="hidden lg:flex w-[80px] bg-white shadow-md">
+    <aside class="hidden lg:flex fixed top-0 left-0 h-screen w-[80px] bg-white shadow-md z-30">
       <SideBar />
     </aside>
 
     <!-- 메인-->
     <div class="flex-1 flex flex-col">
-      <!-- 헤더 -->
-      <HeaderLayout v-if="showHeader" />
-      <GoBackHeaderLayout v-if="showGoBackHeader" :title="goBackTitle" />
-
       <!-- 본문 ! -->
-      <div class="w-full max-w-[420px] mx-auto bg-white flex-1 px-4 pt-6 pb-28 lg:pb-0 lg:px-0">
+      <div class="w-full max-w-[800px] mx-auto bg-white flex-1 px-2 pt-5 pb-28 lg:pb-0 lg:px-0">
         <slot />
       </div>
 
