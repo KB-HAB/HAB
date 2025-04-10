@@ -3,11 +3,7 @@
   <div class="p-4 space-y-2">
     <!-- 하루 쓸수 있는 돈 -->
     <div class="h-[102px]">
-      <HomeCard
-        title="이대로 가면 <strong>하루</strong>에 쓸 수 있는 돈"
-        bgColor="bg-[#6AA25A]"
-        textColor="text-white"
-      />
+      <HomeCard :title="cardTitle" bgColor="bg-[#6AA25A]" textColor="text-white" />
     </div>
 
     <!-- 일주일/남은돈 -->
@@ -50,18 +46,35 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { Pencil } from 'lucide-vue-next'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { Pencil, ChevronRight } from 'lucide-vue-next'
+
 import HomeCard from '@/components/home/HomeCard.vue'
-import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
-import MonthlyCard from '@/components/home/MonthlyCard.vue'
-import { dummyTransactions } from '@/data/transactions.js'
-import { ChevronRight } from 'lucide-vue-next'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import NavBar from '@/components/layout/NavBar.vue'
+import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
+import MonthlyCard from '@/components/home/MonthlyCard.vue'
+
+import { useUserStore } from '@/stores/userStore'
+import { dummyTransactions } from '@/data/transactions.js'
 
 const router = useRouter()
+const userStore = useUserStore()
+
+// 마운트 시 사용자 정보 가져오기 (선택)
+onMounted(() => {
+  if (!userStore.user) {
+    userStore.fetchUser(1)
+  }
+})
+
+// 제목 생성
+const cardTitle = computed(() => {
+  const name = userStore.user?.nickname || '엥'
+  return `<strong>${name}</strong>님이 오늘 하루</strong>에 쓸 수 있는 돈`
+})
+
 const handleEditBudget = () => {
   router.push('/setting/budget')
 }
@@ -72,8 +85,16 @@ const goToDetail = (id) => {
   router.push(`/transactions/${id}`)
 }
 
-const dailyAmount = ref()
-const weeklyAmount = ref()
-const remainingAmount = ref()
+const dailyAmount = ref(0)
+const weeklyAmount = ref(0)
+
+// 남은 돈 계산
+const remainingAmount = computed(() => {
+  const budget = userStore.budgetMonthly
+  const spent = 10000 // ← EXPENDITURE로 대체 예정
+  return budget - spent
+})
+
+// 거래
 const previewTransactions = computed(() => dummyTransactions.value.slice(0, 4))
 </script>
