@@ -48,8 +48,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Pencil } from 'lucide-vue-next'
-import { ChevronRight } from 'lucide-vue-next'
+import { Pencil, ChevronRight } from 'lucide-vue-next'
 
 import HomeCard from '@/components/home/HomeCard.vue'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
