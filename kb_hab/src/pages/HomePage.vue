@@ -42,7 +42,7 @@
       <TransactionItemList :transactions="previewTransactions" @click="goToDetail" />
     </div>
   </div>
-  <NavBar />
+  <!-- <NavBar /> -->
 </template>
 
 <script setup>
