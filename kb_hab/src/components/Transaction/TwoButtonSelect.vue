@@ -2,11 +2,11 @@
   <div class="flex gap-2 w-full">
     <button
       v-for="option in options"
-      :key="option"
+      :key="option.value"
       @click="handleClick(option)"
       :class="getButtonClass(option)"
     >
-      {{ option }}
+      {{ option.label }}
     </button>
   </div>
 </template>
@@ -15,17 +15,20 @@
 const props = defineProps({
   modelValue: {
     type: String,
-    default: '', // 초기 선택 없음
+    default: '', // 실제 저장 값: 'INCOME' 또는 'EXPENDITURE'
   },
   options: {
     type: Array,
-    default: () => ['수입', '지출'],
+    default: () => [
+      { label: '수입', value: 'INCOME' },
+      { label: '지출', value: 'EXPENDITURE' },
+    ],
   },
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-const isSelected = (option) => props.modelValue === option
+const isSelected = (option) => props.modelValue === option.value
 
 const getButtonClass = (option) => {
   const baseClass =
@@ -37,8 +40,8 @@ const getButtonClass = (option) => {
 }
 
 const handleClick = (option) => {
-  const newValue = isSelected(option) ? '' : option
-  emit('update:modelValue', newValue) // 버튼 재클릭시 선택 취소
+  const newValue = isSelected(option) ? '' : option.value
+  emit('update:modelValue', newValue)
 }
 </script>
 

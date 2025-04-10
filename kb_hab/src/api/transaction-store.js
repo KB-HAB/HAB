@@ -10,6 +10,8 @@ import {
   putTransaction,
   deleteTransaction,
 } from '@/api/TransactionApi'
+import { formatDateToDashed, formatDateToInt } from '@/utils/dateFormatUtils'
+import { toRaw } from 'vue'
 
 export const useTransactionStore = defineStore('transactions', {
   state: () => ({
@@ -185,6 +187,7 @@ export const useTransactionStore = defineStore('transactions', {
     async fetchSingleTransaction(id) {
       try {
         const response = await fetchTransaction(id)
+        response.date = formatDateToDashed(response.date) // 20240101 -> 2024-01-01
         return response
       } catch (err) {
         console.error('transaction-store: fetchSingleTransaction', err)
@@ -192,9 +195,11 @@ export const useTransactionStore = defineStore('transactions', {
       }
     },
 
-    async addSingleTransaction(transaction) {
+    async saveTransaction(transaction) {
       try {
-        const response = await createTransaction(transaction)
+        const raw = { ...toRaw(transaction) }
+        raw.date = formatDateToInt(raw.date)
+        const response = await createTransaction(raw)
         return response
       } catch (err) {
         console.error('transaction-store: fetchSingleTransaction', err)
@@ -204,8 +209,9 @@ export const useTransactionStore = defineStore('transactions', {
 
     async editSingleTransaction(id, transaction) {
       try {
-        const response = await putTransaction(id, transaction)
-        return response
+        const raw = { ...toRaw(transaction) }
+        raw.date = formatDateToInt(raw.date)
+        return await putTransaction(id, raw)
       } catch (err) {
         console.error('transaction-store: fetchSingleTransaction', err)
         throw err
