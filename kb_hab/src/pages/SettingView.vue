@@ -18,17 +18,6 @@
           <p class="text-sm text-gray-400">{{ user.email }}</p>
         </section>
 
-        <!-- 설정 버튼: 내 데이터 삭제 -->
-        <button
-          @click="openDialog = true"
-          class="w-full flex items-center justify-between p-4 bg-gray-100 rounded-lg text-left hover:text-neutral-500 hover:cursor-pointer"
-        >
-          <div class="flex items-center gap-3">
-            <Trash2 />
-            거래 내역 초기화
-          </div>
-        </button>
-
         <!-- 설정 버튼: 월 예산 설정 -->
         <button
           @click="goToBudget"
@@ -51,37 +40,22 @@
           >GitHub</a
         >
       </footer>
-
-      <!-- 삭제 확인 다이얼로그 -->
-      <el-dialog v-model="openDialog" title="경고" width="300px">
-        <span>정말 삭제하시겠습니까?</span>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="openDialog = false">취소</el-button>
-            <el-button type="danger" @click="handleDelete">예</el-button>
-          </span>
-        </template>
-      </el-dialog>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 // 기존에 사용하던 아이콘들
-import { Pencil, Trash2, HandCoins } from 'lucide-vue-next'
+import { Pencil, HandCoins } from 'lucide-vue-next'
 // 새 내비게이션에 사용할 아이콘들
-import NavBar from '@/components/layout/NavBar.vue'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import IconButton from '@/components/common/IconButton.vue'
-import CommonButton from '@/components/common/CommonButton.vue'
 
 const router = useRouter()
-
-const openDialog = ref(false)
 // 사용자 정보를 저장할 객체 (json-server의 단일 유저 사용)
 const user = reactive({ id: '', nickname: '', email: '' })
 
@@ -109,12 +83,6 @@ const editNickname = () => {
 // 월 예산 설정 화면으로 이동
 const goToBudget = () => {
   router.push({ name: 'editBudget' })
-}
-
-// 내 데이터 삭제 처리 함수
-const handleDelete = () => {
-  openDialog.value = false
-  alert('삭제되었습니다.')
 }
 </script>
 
