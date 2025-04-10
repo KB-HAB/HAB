@@ -67,30 +67,96 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { defineProps, defineEmits } from 'vue'
 import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-vue-next'
 import HomeCard from '@/components/home/HomeCard.vue'
 import IconButton from '@/components/common/IconButton.vue'
 
+import { dateToInt, intToDate } from '@/api/TransactionApi'
+import { useTransactionStore } from '@/api/transaction-store'
+
+import { useTransactionStoreAdapter } from '@/stores/transactionStoreAdapter'
+
 // dayjs 추가
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
+
 dayjs.locale('ko')
 
-const props = defineProps({
-  income: {
-    type: Number,
-    default: 0,
-  },
-  expenditure: {
-    type: Number,
-    default: 0,
-  },
+// 디버그 토글
+const showDebug = ref(false)
+const toggleDebug = () => {
+  showDebug.value = !showDebug.value
+}
+
+const now = new Date()
+const selectedDate = ref(new Date())
+const isFilterOpen = ref(false)
+
+// 컴포넌트 마운트 시 데이터 로드
+onMounted(async () => {
+  // 시작 시 모든 트랜잭션을 가져온 다음 필터링
+  await transactionStore.fetchAllTransactions()
+  // 현재 월에 해당하는 데이터만 필터링
+  await loadTransactionsForCurrentMonth()
 })
 
+// 선택한 날짜가 변경될 때 데이터 다시 로드
+watch(selectedDate, async () => {
+  if (!isFiltered.value) {
+    await loadTransactionsForCurrentMonth()
+  }
+})
+
+// 거래 데이터 초기값
+// const transaction = reactive({
+//   date: '',
+//   name: '',
+//   memo: '',
+//   amount: 0,
+//   type: '',
+//   category: '',
+// })
+
+import { fetchTransactionsByMonth } from '@/api/TransactionApi.js'
+import axios from "axios";
+
+const getIncomeMonth = async (year, month) => {
+  const response = await fetchTransactionsByMonth(year, month)
+  const income = ref(0)
+  for (const responseElement of response) {
+    if (responseElement.type === '수입') {
+      income.value += responseElement.amount
+    }
+    return income.value;
+  }
+}
+
+const getExponseMonth = async (year, month) => {
+  const response = await fetchTransactionsByMonth(year, month)
+  const outcome = ref(0)
+  for (const responseElement of response) {
+    if (responseElement.type === '수입') {
+      outcome.value += responseElement.amount
+    }
+    return outcome.value;
+  }
+}
+
+
+// const props = defineProps({
+//   income: {
+//     type: Number,
+//     default: 0,
+//   },
+//   expenditure: {
+//     type: Number,
+//     default: 0,
+//   },
+// })
+
 // emit으로 거래 클릭 이벤트 전달
-const emit = defineEmits(['click'])
 
 // 현재 선택된 월 (기본값: 오늘)
 const selectedMonth = ref(dayjs().format('YYYY-MM'))
@@ -104,12 +170,17 @@ const formattedMonth = computed(() => {
 const isCurrentMonth = computed(() => {
   const today = dayjs()
   const selected = dayjs(selectedMonth.value)
+  // return currentYear.value === now.getFullYear() && currentMonth.value === now.getMonth() + 1
   return today.year() === selected.year() && today.month() === selected.month()
 })
 
 // 이전 달 이동
 const goToPrevMonth = () => {
   selectedMonth.value = dayjs(selectedMonth.value).subtract(1, 'month').format('YYYY-MM')
+  // api 에서 월 넣어서 transaction 받아서
+  // 수입만 받아서 income 상태에 넣으세요
+  // 인컴에만 넣으면 홈카드는 자동으로 업데이트
+
 }
 
 // 다음 달 이동
@@ -117,6 +188,10 @@ const goToNextMonth = () => {
   if (!isCurrentMonth.value) {
     selectedMonth.value = dayjs(selectedMonth.value).add(1, 'month').format('YYYY-MM')
   }
+  // api 에서 월 넣어서 transaction 받아서
+  // 지출만 받아서 (요청할때 쿼리 때려도 되고. 받아와서 필터링해도 됨) expense 상태에 넣으세요
+  // expense에만 넣으면 홈카드는 자동으로 업데이트
+
 }
 
 // 달 클릭 시 date-picker 열기
@@ -131,7 +206,7 @@ const handleMonthChange = (val) => {
 
 // 순수익 = 수입 - 지출
 const NetProfit = computed(() => {
-  const result = props.income - props.expenditure
+  const result = 10000 - 1000
   return isNaN(result) ? 0 : result
 })
 </script>
