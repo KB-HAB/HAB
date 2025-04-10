@@ -63,9 +63,17 @@ const handleClick = () => {
   emit('click', props.transaction.id)
 }
 
-const formatDate = (dateStr) => {
-  const [year, month, day] = dateStr.split('-')
-  return `${month.padStart(2, '0')}.${day.padStart(2, '0')}`
+const formatDate = (dateInt) => {
+  // 정수를 문자열로 변환
+  const dateStr = String(dateInt)
+
+  // 문자열에서 년(0-3), 월(4-5), 일(6-7) 추출
+  const year = dateStr.substring(0, 4)
+  const month = dateStr.substring(4, 6)
+  const day = dateStr.substring(6, 8)
+
+  // 월.일 형식으로 반환
+  return `${month}.${day}`
 }
 
 const getCategoryIcon = (category_id) => {

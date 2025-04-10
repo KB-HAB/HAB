@@ -3,6 +3,8 @@ import {
   fetchTransactions,
   fetchTransactionsByDate,
   fetchTransactionsByDateRange,
+  dateToInt,
+  fetchTransactionsByMonth,
 } from '@/api/TransactionApi'
 
 export const useTransactionStore = defineStore('transactions', {
@@ -34,13 +36,9 @@ export const useTransactionStore = defineStore('transactions', {
         // 날짜 범위 필터
         let matchesDateRange = true
         if (this.filters.dateRange && this.filters.dateRange.length === 2) {
-          const txDate = new Date(tx.date)
-          const startDate = new Date(this.filters.dateRange[0])
-          const endDate = new Date(this.filters.dateRange[1])
-
-          // 시작일과 종료일을 포함하는 범위로 설정
-          startDate.setHours(0, 0, 0, 0)
-          endDate.setHours(23, 59, 59, 999)
+          const txDate = parseInt(tx.date) // 문자열인 경우 숫자로 변환
+          const startDate = parseInt(this.filters.dateRange[0])
+          const endDate = parseInt(this.filters.dateRange[1])
 
           matchesDateRange = txDate >= startDate && txDate <= endDate
         }
@@ -70,19 +68,7 @@ export const useTransactionStore = defineStore('transactions', {
       this.error = null
 
       try {
-        // 월의 시작일과 끝일 계산
-        const startDate = new Date(year, month - 1, 1)
-        const endDate = new Date(year, month, 0) // 다음 달의 0일은 현재 달의 마지막 날
-
-        // 날짜 범위로 데이터 가져오기
-        this.transactions = await fetchTransactions()
-
-        // 클라이언트 측에서 월 필터링 적용
-        this.transactions = this.transactions.filter((tx) => {
-          const txDate = new Date(tx.date)
-          return txDate >= startDate && txDate <= endDate
-        })
-
+        this.transactions = await fetchTransactionsByMonth(year, month)
         this.resetPagination()
       } catch (error) {
         this.error = error.message || '거래 내역을 불러오는데 실패했습니다.'
@@ -97,20 +83,23 @@ export const useTransactionStore = defineStore('transactions', {
       this.error = null
 
       try {
-        // 모든 트랜잭션을 불러온 후 클라이언트에서 필터링
-        this.transactions = await fetchTransactions()
-
-        // 날짜 범위 필터링
         if (startDate && endDate) {
-          const start = new Date(startDate)
-          const end = new Date(endDate)
-          start.setHours(0, 0, 0, 0)
-          end.setHours(23, 59, 59, 999)
+          const startInt = dateToInt(startDate)
+          const endInt = dateToInt(endDate)
 
-          this.transactions = this.transactions.filter((tx) => {
-            const txDate = new Date(tx.date)
-            return txDate >= start && txDate <= end
-          })
+          // 날짜 범위를 파라미터로 전달하여 서버에서 필터링
+          const params = {
+            date_gte: startInt,
+            date_lte: endInt,
+            _sort: 'date',
+            _order: 'desc',
+          }
+
+          const response = await axios.get('api/transactions', { params })
+          this.transactions = response.data
+        } else {
+          // 날짜 범위가 없는 경우 모든 트랜잭션 가져오기
+          this.transactions = await fetchTransactions()
         }
 
         this.resetPagination()
@@ -138,7 +127,17 @@ export const useTransactionStore = defineStore('transactions', {
     },
 
     setFilter(filterType, value) {
-      this.filters[filterType] = value
+      // 날짜 필터인 경우, Date 객체를 정수로 변환
+      if (filterType === 'dateRange' && Array.isArray(value) && value.length === 2) {
+        // value가 Date 객체라면 정수로 변환
+        if (value[0] instanceof Date && value[1] instanceof Date) {
+          this.filters[filterType] = [dateToInt(value[0]), dateToInt(value[1])]
+        } else {
+          this.filters[filterType] = value
+        }
+      } else {
+        this.filters[filterType] = value
+      }
       this.resetPagination()
     },
 

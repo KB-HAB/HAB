@@ -178,6 +178,7 @@ import 'element-plus/es/components/button/style/css'
 import 'element-plus/es/components/pagination/style/css'
 import 'element-plus/es/components/select/style/css'
 import { useTransactionStore } from '@/api/transaction-store'
+import { dateToInt, intToDate } from '@/api/TransactionApi'
 
 // 스토어 설정
 const transactionStore = useTransactionStore()
@@ -236,29 +237,57 @@ const loadTransactionsForCurrentMonth = async () => {
 }
 
 const openFilterDialog = () => {
-  tempDateRange.value = transactionStore.filters.dateRange.length
-    ? [...transactionStore.filters.dateRange]
-    : []
+  // 기존에 선택된 필터가 있으면 유지
+  if (transactionStore.filters.dateRange?.length === 2) {
+    const startInt = transactionStore.filters.dateRange[0]
+    const endInt = transactionStore.filters.dateRange[1]
+    tempDateRange.value = [intToDate(startInt), intToDate(endInt)]
+  } else {
+    tempDateRange.value = []
+  }
+
   tempCategory.value = transactionStore.filters.category_id
   tempType.value = transactionStore.filters.type
   isFilterOpen.value = true
 }
 
 const applyFilters = async () => {
-  // 날짜 범위 필터 적용
-  if (tempDateRange.value?.length === 2) {
-    await transactionStore.fetchTransactionsByDateRange(
-      tempDateRange.value[0],
-      tempDateRange.value[1],
-    )
-    transactionStore.setFilter('dateRange', tempDateRange.value)
+  try {
+    // 날짜 범위 필터 적용
+    if (tempDateRange.value?.length === 2) {
+      const startDate = tempDateRange.value[0]
+      const endDate = tempDateRange.value[1]
+
+      // Date 객체가 아니면 변환
+      const startObj = startDate instanceof Date ? startDate : new Date(startDate)
+      const endObj = endDate instanceof Date ? endDate : new Date(endDate)
+
+      // 정수 형태로 변환
+      const startInt = dateToInt(startObj)
+      const endInt = dateToInt(endObj)
+
+      console.log('필터 적용 - 날짜 범위:', startInt, endInt)
+
+      // 스토어 필터 설정 (정수 값으로)
+      transactionStore.setFilter('dateRange', [startInt, endInt])
+
+      // API 호출
+      await transactionStore.fetchTransactionsByMonth(
+        startObj.getFullYear(),
+        startObj.getMonth() + 1,
+        endObj,
+      )
+    }
+
+    // 카테고리와 타입 필터 적용
+    transactionStore.setFilter('category_id', tempCategory.value)
+    transactionStore.setFilter('type', tempType.value)
+
+    isFilterOpen.value = false
+  } catch (error) {
+    console.error('필터 적용 중 오류 발생:', error)
+    transactionStore.error = '필터 적용 중 오류가 발생했습니다'
   }
-
-  // 카테고리와 타입 필터 적용
-  transactionStore.setFilter('category_id', tempCategory.value)
-  transactionStore.setFilter('type', tempType.value)
-
-  isFilterOpen.value = false
 }
 
 const resetFilters = async () => {
@@ -281,8 +310,17 @@ const displayDateLabel = computed(() => {
   if (transactionStore.filters.dateRange?.length === 2) {
     const start = transactionStore.filters.dateRange[0]
     const end = transactionStore.filters.dateRange[1]
-    const format = (date) => `${date.getMonth() + 1}.${date.getDate()}`
-    return `${format(start)} - ${format(end)}`
+
+    // 정수 형식(yyyymmdd)에서 월과 일 추출
+    const formatIntDate = (dateInt) => {
+      const dateStr = String(dateInt)
+      // 월은 5-6번째 자리, 일은 7-8번째 자리
+      const month = dateStr.substring(4, 6)
+      const day = dateStr.substring(6, 8)
+      return `${parseInt(month)}.${parseInt(day)}`
+    }
+
+    return `${formatIntDate(start)} - ${formatIntDate(end)}`
   }
   return `${currentYear.value}.${String(currentMonth.value).padStart(2, '0')}`
 })
