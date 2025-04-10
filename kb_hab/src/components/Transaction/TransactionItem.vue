@@ -13,14 +13,14 @@
     </div>
 
     <div class="flex flex-col items-end gap-2 pt-1 pr-1">
-      <component :is="getCategoryIcon(transaction.category)" class="w-5 h-5 text-gray-500" />
+      <component :is="getCategoryIcon(transaction.category_id)" class="w-5 h-5 text-gray-500" />
       <div
         :class="[
           'text-base font-semibold',
-          transaction.type === '수입' ? 'text-[#6AA25A]' : 'text-black',
+          transaction.type === 'INCOME' ? 'text-[#6AA25A]' : 'text-black',
         ]"
       >
-        {{ transaction.type === '수입' ? '+' : '-' }}
+        {{ transaction.type === 'INCOME' ? '+' : '-' }}
         {{ Number(transaction.amount).toLocaleString() }} 원
       </div>
     </div>
@@ -68,7 +68,7 @@ const formatDate = (dateStr) => {
   return `${month.padStart(2, '0')}.${day.padStart(2, '0')}`
 }
 
-const getCategoryIcon = (category) => {
+const getCategoryIcon = (category_id) => {
   const map = {
     1: Utensils,
     2: Coffee,
@@ -88,6 +88,6 @@ const getCategoryIcon = (category) => {
     16: HandCoins,
     17: PiggyBank,
   }
-  return map[category] || HelpCircle
+  return map[category_id] || HelpCircle
 }
 </script>
