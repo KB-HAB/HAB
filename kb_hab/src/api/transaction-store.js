@@ -5,6 +5,10 @@ import {
   fetchTransactionsByDateRange,
   dateToInt,
   fetchTransactionsByMonth,
+  fetchTransaction,
+  createTransaction,
+  putTransaction,
+  deleteTransaction,
 } from '@/api/TransactionApi'
 
 export const useTransactionStore = defineStore('transactions', {
@@ -176,6 +180,45 @@ export const useTransactionStore = defineStore('transactions', {
     setItemsPerPage(count) {
       this.pagination.itemsPerPage = count
       this.resetPagination()
+    },
+
+    async fetchSingleTransaction(id) {
+      try {
+        const response = await fetchTransaction(id)
+        return response
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async addSingleTransaction(transaction) {
+      try {
+        const response = await createTransaction(transaction)
+        return response
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async editSingleTransaction(id, transaction) {
+      try {
+        const response = await putTransaction(id, transaction)
+        return response
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async deleteSingleTransaction(id) {
+      try {
+        await deleteTransaction(id)
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
     },
   },
 })

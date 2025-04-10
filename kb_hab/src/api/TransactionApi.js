@@ -119,3 +119,36 @@ export const intToDate = (intDate) => {
   const day = parseInt(strDate.substring(6, 8))
   return new Date(year, month, day)
 }
+
+// 거래 생성
+export const createTransaction = async (transaction) => {
+  try {
+    const response = await axios.post('api/transactions', { transaction })
+    return response.data
+  } catch (err) {
+    console.error('TransactionApi: createTransaction', err)
+    throw err
+  }
+}
+
+// 거래 수정
+export const putTransaction = async (id, transaction) => {
+  try {
+    const response = await axios.put(`api/transactions/${id}`, { transaction })
+    return response.data
+  } catch (err) {
+    console.error('TransactionApi: editTransaction', err)
+    throw err
+  }
+}
+
+// 거래 삭제
+export const deleteTransaction = async (id) => {
+  try {
+    const response = await axios.delete(`api/transactions/${id}`)
+    return response.data
+  } catch (err) {
+    console.error('TransactionApi: deleteTransaction', err)
+    throw err
+  }
+}
