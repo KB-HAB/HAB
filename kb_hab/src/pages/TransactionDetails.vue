@@ -20,7 +20,7 @@
       <div>
         <label class="text-base font-bold flex items-center mb-3">거래 이름</label>
         <InputWithLength
-          v-model="transaction.name"
+          v-model="transaction.title"
           placeholder="거래 이름을 입력하세요"
           :maxLength="100"
           class="w-full"
@@ -47,7 +47,13 @@
       <!-- 거래 구분 선택 (수입/지출) -->
       <div>
         <label class="text-base font-bold flex items-center mb-3">구별</label>
-        <TwoButtonSelect v-model="transaction.type" :leftOption="'수입'" :rightOption="'지출'" />
+        <TwoButtonSelect
+          v-model="transaction.type"
+          :options="[
+            { label: '수입', value: 'INCOME' },
+            { label: '지출', value: 'EXPENDITURE' },
+          ]"
+        />
       </div>
 
       <!-- 카테고리 선택 -->
@@ -90,7 +96,12 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="openDeleteDialog = false">취소</el-button>
-          <el-button type="danger" @click="confirmDelete" :style="{ backgroundColor: '#6AA25A', borderColor: '#6AA25A'}">예</el-button>
+          <el-button
+            type="danger"
+            @click="confirmDelete"
+            :style="{ backgroundColor: '#6AA25A', borderColor: '#6AA25A' }"
+            >예</el-button
+          >
         </span>
       </template>
     </el-dialog>
@@ -101,7 +112,12 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="openSaveDialog = false">취소</el-button>
-          <el-button type="primary" @click="confirmSave" :style="{ backgroundColor: '#6AA25A', borderColor: '#6AA25A'}">예</el-button>
+          <el-button
+            type="primary"
+            @click="confirmSave"
+            :style="{ backgroundColor: '#6AA25A', borderColor: '#6AA25A' }"
+            >예</el-button
+          >
         </span>
       </template>
     </el-dialog>
@@ -118,8 +134,6 @@ import PriceInput from '@/components/common/PriceInput.vue'
 import TwoButtonSelect from '@/components/Transaction/TwoButtonSelect.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
 import CategoryButton from '@/components/common/CategoryButton.vue'
-
-// import { dummyTransactions } from '@/data/transactions.js'
 import { useTransactionStoreAdapter } from '@/stores/transactionStoreAdapter'
 
 const router = useRouter()
@@ -128,42 +142,42 @@ const route = useRoute()
 // 거래 데이터 초기값
 const transaction = reactive({
   date: '',
-  name: '',
+  title: '',
   memo: '',
   amount: 0,
   type: '',
   category: '',
 })
 
-const { getTransaction, deleteTransaction, editTransaction } = useTransactionStoreAdapter();
+const { getTransaction, deleteTransaction, editTransaction } = useTransactionStoreAdapter()
 
 // 값 초기화
 const fetchTransaction = async () => {
   const transactionId = route.params.id
 
-  try{
+  try {
     const foundTransaction = await getTransaction(transactionId)
-    console.log(foundTransaction);
+    console.log(foundTransaction)
 
     if (foundTransaction) {
-    transaction.date = foundTransaction.date
-    transaction.name = foundTransaction.title
-    transaction.memo = foundTransaction.memo || ''
-    transaction.amount = foundTransaction.amount
-    transaction.type = foundTransaction.type
-    transaction.category = foundTransaction.category
+      transaction.date = foundTransaction.date
+      transaction.title = foundTransaction.title
+      transaction.memo = foundTransaction.memo || ''
+      transaction.amount = foundTransaction.amount
+      transaction.type = foundTransaction.type
+      transaction.category = foundTransaction.category
     }
 
     // 깊은 복사를 통해 초기값을 설정
     initialTransaction.value = JSON.parse(JSON.stringify(transaction))
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 }
 
 // 조회
 onMounted(() => {
-  fetchTransaction();
+  fetchTransaction()
 })
 
 // 뒤로 가기 핸들러
@@ -177,7 +191,7 @@ const initialTransaction = ref({ ...transaction })
 // 수정 여부 체크: 초기 값과 비교하여 변경된 필드만 체크
 const isModified = computed(() => {
   return (
-    transaction.name !== initialTransaction.value.name ||
+    transaction.title !== initialTransaction.value.title ||
     transaction.memo !== initialTransaction.value.memo ||
     transaction.amount !== initialTransaction.value.amount ||
     transaction.type !== initialTransaction.value.type ||
@@ -208,26 +222,25 @@ const confirmDelete = async () => {
     await deleteTransaction(transactionId)
     router.back()
   } catch (error) {
-    console.log("삭제 실패 : ", error)
+    console.log('삭제 실패 : ', error)
   }
 }
 
 // 수정 확인 후 처리 함수
-const confirmSave = async() => {
+const confirmSave = async () => {
   openSaveDialog.value = false
-  const transactionId =route.params.id
+  const transactionId = route.params.id
 
   try {
-    await editTransaction(transactionId)
+    await editTransaction(transactionId, transaction)
 
     // 수정 확인용
     console.log('Modified Transaction Data: ', transaction)
 
     // 새로고침
-    router.go(0)
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
   } catch (error) {
-    console.log("수정 실패 : ", error)
+    console.log('수정 실패 : ', error)
   }
 }
 

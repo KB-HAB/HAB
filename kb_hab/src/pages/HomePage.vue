@@ -39,7 +39,7 @@
         </h3>
       </div>
 
-      <TransactionItemList :transactions="previewTransactions" @click="goToDetail" />
+      <TransactionItemList :transactions="recentTransactions" @click="goToDetail" />
     </div>
   </div>
   <!-- <NavBar /> -->
@@ -57,16 +57,18 @@ import TransactionItemList from '@/components/Transaction/TransactionItemList.vu
 import MonthlyCard from '@/components/home/MonthlyCard.vue'
 
 import { useUserStore } from '@/stores/userStore'
-import { dummyTransactions } from '@/data/transactions.js'
+import { useTransactionStore } from '@/api/transaction-store'
 
 const router = useRouter()
 const userStore = useUserStore()
+const transactionStore = useTransactionStore()
 
 // 마운트 시 사용자 정보 가져오기 (선택)
 onMounted(() => {
   if (!userStore.user) {
     userStore.fetchUser(1)
   }
+  loadRecentTransactions()
 })
 
 // 제목 생성
@@ -96,5 +98,11 @@ const remainingAmount = computed(() => {
 })
 
 // 거래
-const previewTransactions = computed(() => dummyTransactions.value.slice(0, 4))
+
+// 최근거래
+const recentTransactions = ref([])
+
+const loadRecentTransactions = async () => {
+  recentTransactions.value = await transactionStore.fetchRecentTransactions(5)
+}
 </script>

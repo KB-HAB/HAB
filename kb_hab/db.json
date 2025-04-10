@@ -471,6 +471,42 @@
       "date": 20241204,
       "type": "EXPENDITURE",
       "category_id": 1
+    },
+    {
+      "id": "51",
+      "title": "돈 주세용",
+      "memo": "깁미머니",
+      "amount": 4000000,
+      "date": 20250410,
+      "type": "INCOME",
+      "category_id": 16
+    },
+    {
+      "id": "52",
+      "title": "쇼핑",
+      "memo": "텅장이되",
+      "amount": 2000000,
+      "date": 20250408,
+      "type": "EXPENDITURE",
+      "category_id": 15
+    },
+    {
+      "id": "53",
+      "title": "깁미머니",
+      "memo": "깁미머니",
+      "amount": 3500000,
+      "date": 20250407,
+      "type": "INCOME",
+      "category_id": 16
+    },
+    {
+      "id": "54",
+      "title": "쇼핑",
+      "memo": "텅장이되",
+      "amount": 2500000,
+      "date": 20250409,
+      "type": "EXPENDITURE",
+      "category_id": 15
     }
   ]
 }
