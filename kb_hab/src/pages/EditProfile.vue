@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen p-4 flex flex-col">
+  <div class="min-h-screen p-8 flex flex-col">
     <GoBackHeaderLayout title="프로필 수정" />
 
     <!-- 본문 영역 -->

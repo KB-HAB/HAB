@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div class="p-8">
     <!-- Header: 뒤로가기 버튼 -->
     <GoBackHeaderLayout :title="''" @goBack="handleBack" />
 

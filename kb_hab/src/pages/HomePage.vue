@@ -1,6 +1,6 @@
 <template>
   <HeaderLayout />
-  <div class="p-4 space-y-2">
+  <div class="p-8 space-y-2">
     <!-- 하루 쓸수 있는 돈 -->
     <div class="h-[102px]">
       <HomeCard :title="cardTitle" bgColor="bg-[#6AA25A]" textColor="text-white" />

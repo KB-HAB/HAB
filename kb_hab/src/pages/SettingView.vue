@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen bg-white px-6 pb-24">
+  <div class="flex flex-col min-h-screen bg-white p-8 pb-24">
     <HeaderLayout />
 
     <!-- Body -->
