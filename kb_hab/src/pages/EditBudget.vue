@@ -4,7 +4,6 @@
 
     <main class="flex-1 flex flex-col justify-between">
       <PriceInput v-model="budget" />
-
       <div class="flex justify-between mt-10 gap-4">
         <CommonButton variant="white" :onClick="goBack" class="w-full justify-center">
           취소
