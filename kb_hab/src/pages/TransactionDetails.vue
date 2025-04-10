@@ -134,8 +134,6 @@ import PriceInput from '@/components/common/PriceInput.vue'
 import TwoButtonSelect from '@/components/Transaction/TwoButtonSelect.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
 import CategoryButton from '@/components/common/CategoryButton.vue'
-
-// import { dummyTransactions } from '@/data/transactions.js'
 import { useTransactionStoreAdapter } from '@/stores/transactionStoreAdapter'
 
 const router = useRouter()

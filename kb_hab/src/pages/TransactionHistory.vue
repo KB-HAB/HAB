@@ -165,7 +165,6 @@ import { ChevronLeft, ChevronRight, Filter } from 'lucide-vue-next'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
 import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
 import NavBar from '@/components/layout/NavBar.vue'
-import ApiDebug from '@/pages/ApiDebug.vue'
 import { useRouter } from 'vue-router'
 import 'element-plus/es/components/button/style/css'
 import 'element-plus/es/components/pagination/style/css'
@@ -353,18 +352,18 @@ const categoryMap = {
   7: '의료·건강·피트니스',
   8: '주거·통신',
   9: '보험·세금·기타금융',
-  6: '취미·여가',
-  7: '의료·건강·피트니스',
-  8: '주거·통신',
-  9: '보험·세금·기타금융',
-  10: '미용',
-  11: '교통',
-  12: '교육',
-  13: '생활',
-  14: '카테고리 없음',
-  15: '이체',
-  16: '급여',
-  17: '저축·투자',
+  10: '취미·여가',
+  11: '의료·건강·피트니스',
+  12: '주거·통신',
+  13: '보험·세금·기타금융',
+  14: '미용',
+  15: '교통',
+  16: '교육',
+  17: '생활',
+  18: '카테고리 없음',
+  19: '이체',
+  20: '급여',
+  21: '저축·투자',
 }
 
 const isFiltered = computed(() => {
