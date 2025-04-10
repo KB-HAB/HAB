@@ -5,7 +5,13 @@ import {
   fetchTransactionsByDateRange,
   dateToInt,
   fetchTransactionsByMonth,
+  fetchTransaction,
+  createTransaction,
+  putTransaction,
+  deleteTransaction,
 } from '@/api/TransactionApi'
+import { formatDateToDashed, formatDateToInt } from '@/utils/dateFormatUtils'
+import { toRaw } from 'vue'
 
 export const useTransactionStore = defineStore('transactions', {
   state: () => ({
@@ -176,6 +182,49 @@ export const useTransactionStore = defineStore('transactions', {
     setItemsPerPage(count) {
       this.pagination.itemsPerPage = count
       this.resetPagination()
+    },
+
+    async fetchSingleTransaction(id) {
+      try {
+        const response = await fetchTransaction(id)
+        response.date = formatDateToDashed(response.date) // 20240101 -> 2024-01-01
+        return response
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async saveTransaction(transaction) {
+      try {
+        const raw = { ...toRaw(transaction) }
+        raw.date = formatDateToInt(raw.date)
+        const response = await createTransaction(raw)
+        return response
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async editSingleTransaction(id, transaction) {
+      try {
+        const raw = { ...toRaw(transaction) }
+        raw.date = formatDateToInt(raw.date)
+        return await putTransaction(id, raw)
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
+    },
+
+    async deleteSingleTransaction(id) {
+      try {
+        await deleteTransaction(id)
+      } catch (err) {
+        console.error('transaction-store: fetchSingleTransaction', err)
+        throw err
+      }
     },
   },
 })

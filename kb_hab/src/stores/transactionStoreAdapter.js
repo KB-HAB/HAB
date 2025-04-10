@@ -1,3 +1,5 @@
+import { useTransactionStore } from '@/api/transaction-store'
+
 const wait = (ms) => new Promise((res) => setTimeout(res, ms))
 
 const mockTransaction = {
@@ -10,10 +12,17 @@ const mockTransaction = {
 }
 
 export function useTransactionStoreAdapter() {
+  const store = useTransactionStore()
+
   // 조회
   const getTransaction = async (id) => {
-    await wait(100)
-    return mockTransaction
+    try {
+      const transaction = await store.fetchSingleTransaction(id)
+      return transaction
+    } catch (err) {
+      console.error('transactionStoreAdapter: getTransaction 에러')
+      throw err
+    }
   }
 
   // 삭제
@@ -23,7 +32,7 @@ export function useTransactionStoreAdapter() {
     }
 
     try {
-      await wait(100)
+      await store.deleteSingleTransaction(id)
     } catch (err) {
       console.error('transactionStoreAdapter: deleteTransaction 에러')
       throw err
@@ -32,14 +41,22 @@ export function useTransactionStoreAdapter() {
 
   // 수정
   const editTransaction = async (id, transaction) => {
-    await wait(100)
-    return transaction
+    try {
+      await store.editSingleTransaction(id, transaction)
+    } catch (err) {
+      console.error('transactionStoreAdapter: editTransaction 에러')
+      throw err
+    }
   }
 
   // 저장
   const saveTransaction = async (transaction) => {
-    await wait(100)
-    return transaction
+    try {
+      return await store.saveTransaction(transaction)
+    } catch (err) {
+      console.error('transactionStoreAdapter: editTransaction 에러')
+      throw err
+    }
   }
 
   return {
