@@ -3,8 +3,12 @@
   <div class="p-4 space-y-2">
     <!-- 하루 쓸수 있는 돈 -->
     <div class="h-[102px]">
-      <HomeCard :title="cardTitle" bgColor="bg-[#6AA25A]" textColor="text-white"
-                :amount="budgetStore.getDailyRemainingBudget().value"/>
+      <HomeCard
+        :title="cardTitle"
+        bgColor="bg-[#6AA25A]"
+        textColor="text-white"
+        :amount="budgetStore.getDailyRemainingBudget().value"
+      />
     </div>
 
     <!-- 일주일/남은돈 -->
@@ -19,7 +23,7 @@
       <!-- 남은 돈 -->
       <HomeCard
         title="남은 돈"
-        :amount="remainingAmount"
+        :amount="budgetStore.getRemainingBudget().value"
         bgColor="bg-[#F8F8F8]"
         textColor="text-black"
         :iconButton="{ icon: Pencil, onClick: handleEditBudget }"
@@ -59,14 +63,12 @@ import MonthlyCard from '@/components/home/MonthlyCard.vue'
 
 import { useUserStore } from '@/stores/userStore'
 import { useTransactionStore } from '@/api/transaction-store'
+import { useBudgetStore } from '@/stores/budgetStore.js'
 
 const router = useRouter()
 const userStore = useUserStore()
 const transactionStore = useTransactionStore()
-
-import { useBudgetStore } from '@/stores/budgetStore.js'
 const budgetStore = useBudgetStore()
-
 
 // 마운트 시 사용자 정보 가져오기 (선택)
 onMounted(() => {
@@ -75,7 +77,6 @@ onMounted(() => {
   }
   loadRecentTransactions()
   budgetStore.initBudget()
-
 })
 
 // 제목 생성
@@ -93,14 +94,6 @@ const gotoHistory = () => {
 const goToDetail = (id) => {
   router.push(`/transactions/${id}`)
 }
-
-
-// 남은 돈 계산
-const remainingAmount = computed(() => {
-  const budget = userStore.budgetMonthly
-  const spent = budgetStore.getRemainingBudget().value // 지출 금액을 가져오는 메서드
-  return budget - spent
-})
 
 // 거래
 

@@ -80,21 +80,22 @@ export const useBudgetStore = defineStore('budgetStore', () => {
 
   function getRemainingBudget() {
     return computed(() => {
-      return remainingBudget.value
+      return Math.max(0, remainingBudget.value)
     })
   }
 
   function getDailyRemainingBudget() {
     return computed(() => {
-      return dailyRemainingBudget.value
+      return Math.max(0, dailyRemainingBudget.value)
     })
   }
 
   function getWeeklyRemainingBudget() {
     return computed(() => {
-      return weeklyRemainingBudget.value
+      return Math.max(0, weeklyRemainingBudget.value)
     })
   }
+
   return {
     getMonthlyBudget,
     getRemainingBudget,
