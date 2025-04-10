@@ -27,7 +27,15 @@
         bgColor="bg-[#F8F8F8]"
         textColor="text-black"
         :iconButton="{ icon: Pencil, onClick: handleEditBudget }"
-      />
+      >
+        <div class="flex gap-1 text-sm">
+          <span class="text-[#6AA25A]"
+            >{{ budgetStore.getMonthlyBudget().value.toLocaleString() }}원</span
+          ><span class="text-red-700"
+            >- {{ budgetStore.getMonthlyExpenditure().value.toLocaleString() }}원</span
+          >
+        </div>
+      </HomeCard>
     </div>
 
     <!-- 수입 / 지출 요약 -->
@@ -57,7 +65,6 @@ import { Pencil, ChevronRight } from 'lucide-vue-next'
 
 import HomeCard from '@/components/home/HomeCard.vue'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
-import NavBar from '@/components/layout/NavBar.vue'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
 import MonthlyCard from '@/components/home/MonthlyCard.vue'
 

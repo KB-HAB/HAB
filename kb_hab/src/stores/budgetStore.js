@@ -96,11 +96,18 @@ export const useBudgetStore = defineStore('budgetStore', () => {
     })
   }
 
+  function getMonthlyExpenditure() {
+    return computed(() => {
+      return monthlyExpenditure.value
+    })
+  }
+
   return {
     getMonthlyBudget,
     getRemainingBudget,
     getDailyRemainingBudget,
     getWeeklyRemainingBudget,
+    getMonthlyExpenditure,
     initBudget,
   }
 })

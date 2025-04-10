@@ -1,19 +1,22 @@
 <template>
   <div
-    class="rounded-xl shadow-md p-4 w-full flex-1 h-[98px] relative"
+    class="rounded-xl shadow-md p-4 w-full flex-1 min-h-[98px] relative"
     :class="[bgColor, textColor]"
   >
     <!-- 아이콘 버튼의 위치를 더 안쪽으로 이동 -->
-    <IconButton
-      v-if="iconButton"
-      :onClick="iconButton.onClick"
-      class="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
-    >
-      <component :is="iconButton.icon" class="w-5 h-5" />
-    </IconButton>
 
     <div class="flex flex-col justify-between h-full">
-      <span class="text-left self-start text-sm" v-html="title"></span>
+      <div class="flex w-full justify-between items-start">
+        <span class="text-left self-start text-sm" v-html="title"></span>
+        <IconButton
+          v-if="iconButton"
+          :onClick="iconButton.onClick"
+          class="text-gray-600 hover:text-gray-900"
+        >
+          <component :is="iconButton.icon" class="w-5 h-5" />
+        </IconButton>
+      </div>
+      <slot />
       <span class="text-lg font-semibold self-end">{{ formattedAmount }} 원</span>
     </div>
   </div>
