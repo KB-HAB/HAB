@@ -4,7 +4,7 @@ import PageLayout from './components/layout/PageLayout.vue'
 </script>
 
 <template>
-  <PageLayout>
+  <PageLayout :showHeader="true">
     <RouterView />
   </PageLayout>
 </template>
