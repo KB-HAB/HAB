@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen bg-white px-4 py-6 flex flex-col">
+
     <!-- Header 영역 -->
     <header class="flex items-center justify-between mb-4">
       <h1 class="text-lg font-bold">프로필 수정</h1>

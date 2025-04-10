@@ -2,10 +2,6 @@
     <!-- Header -->
   <HeaderLayout />
 
-  <div>
-    <br />
-  </div>
-
   <div class="flex flex-col min-h-screen bg-white px-6 pb-24">
 
     <!-- Body -->
