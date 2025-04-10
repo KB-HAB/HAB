@@ -38,16 +38,6 @@ export const updateBudgetMonthly = async (id, budgetMonthly) => {
   return res.data
 }
 
-// [PUT] 유저 데이터 초기화
-export const resetUserData = async (id) => {
-  const res = await axios.put(`${BASE}/${id}`, {
-    nickname: '',
-    email: '',
-    budgetMonthly: 0,
-  })
-  return res.data
-}
-
 // [DELETE] 유저 삭제
 export const deleteUser = async (id) => {
   const res = await axios.delete(`${BASE}/${id}`)

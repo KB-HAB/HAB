@@ -3,7 +3,10 @@
     <GoBackHeaderLayout title="월 예산 설정" />
 
     <main class="flex-1 flex flex-col justify-between">
-      <PriceInput v-model="budget" />
+      <div class="p-4">
+        <span class="mb-2">수정할 금액을 입력해주세요 </span><PriceInput v-model="budget" />
+      </div>
+
       <div class="flex justify-between mt-10 gap-4">
         <CommonButton variant="white" :onClick="goBack" class="w-full justify-center">
           취소
