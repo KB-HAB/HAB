@@ -6,7 +6,9 @@
     <div class="mt-6 space-y-6">
       <!-- 날짜 선택 -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">날짜 <span class="text-neutral-500 ml-1">*</span></label>
+        <label class="text-base font-bold flex items-center mb-3"
+          >날짜 <span class="text-neutral-500 ml-1">*</span></label
+        >
         <el-date-picker
           v-model="transaction.date"
           type="date"
@@ -17,7 +19,9 @@
 
       <!-- 거래 이름 입력 -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">거래 이름 <span class="text-neutral-500 ml-1">*</span></label>
+        <label class="text-base font-bold flex items-center mb-3"
+          >거래 이름 <span class="text-neutral-500 ml-1">*</span></label
+        >
         <InputWithLength
           v-model="transaction.name"
           placeholder="거래 이름을 입력하세요"
@@ -39,18 +43,24 @@
 
       <!-- 가격 입력 -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">가격(원) <span class="text-neutral-500 ml-1">*</span></label>
+        <label class="text-base font-bold flex items-center mb-3"
+          >가격(원) <span class="text-neutral-500 ml-1">*</span></label
+        >
         <PriceInput v-model="transaction.amount" placeholder="가격을 입력하세요" class="w-full" />
       </div>
 
       <!-- 거래 구분 선택 (수입 / 지출) -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">구별 <span class="text-neutral-500 ml-1">*</span></label>
+        <label class="text-base font-bold flex items-center mb-3"
+          >구별 <span class="text-neutral-500 ml-1">*</span></label
+        >
         <TwoButtonSelect v-model="transaction.type" :leftOption="'수입'" :rightOption="'지출'" />
       </div>
 
       <!-- 카테고리 선택 -->
-      <label class="text-base font-bold flex items-center mb-3">카테고리 <span class="text-neutral-500 ml-1">*</span></label>
+      <label class="text-base font-bold flex items-center mb-3"
+        >카테고리 <span class="text-neutral-500 ml-1">*</span></label
+      >
       <div class="flex flex-wrap gap-2">
         <CategoryButton
           v-for="id in 17"
@@ -80,7 +90,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="openSaveDialog = false">취소</el-button>
-          <el-button type="primary" @click="confirmSave">예</el-button>
+          <el-button type="primary" @click="confirmSave" :style="{ backgroundColor: '#6AA25A', borderColor: '#6AA25A'}">예</el-button>
         </span>
       </template>
     </el-dialog>
@@ -88,8 +98,8 @@
 </template>
 
 <script setup>
-import { reactive, computed, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, computed, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
 import InputWithLength from '@/components/common/InputWithLength.vue'
@@ -98,12 +108,10 @@ import TwoButtonSelect from '@/components/Transaction/TwoButtonSelect.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
 import CategoryButton from '@/components/common/CategoryButton.vue'
 
-const router = useRouter()
+import { useTransactionStoreAdapter } from '@/stores/transactionStoreAdapter'
 
-onMounted(() => {
-  // axios 통해서 데이터 가져오기 GET /transactions/:id
-  // transaction.date = '2025-04-09'
-})
+const router = useRouter()
+const route = useRoute()
 
 // 거래 데이터 초기값
 const transaction = reactive({
@@ -114,6 +122,8 @@ const transaction = reactive({
   type: '',
   category: '',
 })
+
+const { saveTransaction } = useTransactionStoreAdapter()
 
 // 뒤로가기
 const handleBack = () => {
@@ -146,10 +156,22 @@ const handleSave = () => {
 }
 
 // 저장 확인 후 처리 함수
-const confirmSave = () => {
+const confirmSave = async () => {
   openSaveDialog.value = false
-  // 저장 확인용
-  console.log('Modified Transaction Data: ', transaction)
+  const transactionId = route.params.id
+
+  try {
+    await saveTransaction(transactionId)
+
+    // 저장 확인용
+    console.log('Modified Transaction Data: ', transaction)
+
+    // 거래내역으로 이동
+    router.push({path: '/transactions'});
+    window.scrollTo(0, 0);
+  } catch (error) {
+    console.log('저장 실패 : ', error)
+  }
 }
 
 // 카테고리 선택 업데이트 함수
