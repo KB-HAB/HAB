@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { getUser, patchUser, updateUser as putUser } from '@/api/user'
 
-import { resetTransactions } from '@/api/transactions' // ← transaction API 추가 필요!
-
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
