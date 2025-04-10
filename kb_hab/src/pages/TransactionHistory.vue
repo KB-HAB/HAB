@@ -1,19 +1,15 @@
 <template>
-  <div class="p-2.5">
-    <div class="bg-white p-4 rounded-2xl shadow-2xl space-y-3">
+  <GoBackHeaderLayout :title="''" @goBack="handleBack" />
+  <div class="p-4">
+    <div class="bg-white p-4 rounded-2xl shadow-custom space-y-3 m-4">
       <!-- 년.월 + <> 버튼 -->
-      <div class="mb-2.5 flex items-center gap-1">
+      <div class="p-2.5 flex items-center gap-1">
         <button v-if="!isFiltered" @click="goToPrevMonth">
           <ChevronLeft class="w-5 h-5" />
         </button>
         <span class="text-lg font-semibold">
           {{ displayDateLabel }}
         </span>
-        <p>
-          전체: {{ transactionStore.transactions.length }}, 필터됨:
-          {{ transactionStore.filteredTransactions.length }}
-        </p>
-
         <button
           v-if="!isFiltered"
           @click="goToNextMonth"
@@ -27,11 +23,8 @@
             <Filter class="w-5 h-5" />
           </button>
           <el-button type="danger" plain @click="resetFilters">필터 초기화</el-button>
-          <button @click="toggleDebug" class="text-xs text-gray-400">API 테스트</button>
         </div>
       </div>
-
-      <ApiDebug v-if="showDebug" @close="showDebug = false" />
 
       <!-- 로딩 상태 -->
       <div v-if="transactionStore.loading" class="py-8 text-center">
@@ -59,19 +52,13 @@
           @click="goToDetail"
         />
 
-        <!-- 디버깅 정보 -->
-        <div v-if="showDebug" class="my-2 p-2 bg-gray-100 text-xs">
-          <p>현재 페이지: {{ transactionStore.pagination.currentPage }}</p>
-          <p>총 페이지: {{ transactionStore.totalPages }}</p>
-          <p>항목 수: {{ transactionStore.filteredTransactions.length }}</p>
-        </div>
-
         <!-- 페이지네이션 UI -->
         <div
           v-if="transactionStore.filteredTransactions.length > 0"
-          class="mt-4 flex justify-between items-center"
+          class="mt-4 flex items-center justify-between relative"
         >
-          <div class="text-sm text-gray-500">
+          <!-- 페이지네이션 내용 -->
+          <div class="text-sm text-gray-500 flex-shrink-0">
             {{ transactionStore.filteredTransactions.length }}개 중
             {{
               (transactionStore.pagination.currentPage - 1) *
@@ -86,7 +73,18 @@
             }}
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <el-pagination
+              v-model:current-page="currentPage"
+              :page-count="transactionStore.totalPages"
+              layout="prev, pager, next"
+              background
+              @current-change="handlePageChange"
+            />
+          </div>
+
+          <!-- 항목 개수 선택: 오른쪽 정렬 -->
+          <div class="flex items-center gap-2 ml-auto">
             <div class="mr-3">
               <el-select
                 v-model="itemsPerPage"
@@ -99,19 +97,12 @@
                 <el-option label="5개씩" :value="5" />
               </el-select>
             </div>
-
-            <el-pagination
-              v-model:current-page="currentPage"
-              :page-count="transactionStore.totalPages"
-              layout="prev, pager, next"
-              background
-              @current-change="handlePageChange"
-            />
           </div>
         </div>
       </div>
     </div>
   </div>
+  <NavBar />
 
   <el-dialog
     v-model="isFilterOpen"
@@ -172,6 +163,8 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { ChevronLeft, ChevronRight, Filter } from 'lucide-vue-next'
 import TransactionItemList from '@/components/Transaction/TransactionItemList.vue'
+import GoBackHeaderLayout from '@/components/layout/GoBackHeaderLayout.vue'
+import NavBar from '@/components/layout/NavBar.vue'
 import ApiDebug from '@/pages/ApiDebug.vue'
 import { useRouter } from 'vue-router'
 import 'element-plus/es/components/button/style/css'
@@ -234,6 +227,10 @@ watch(
 const loadTransactionsForCurrentMonth = async () => {
   // 이미 모든 트랜잭션을 로드했으므로 해당 월 데이터만 필터링
   await transactionStore.fetchTransactionsByMonth(currentYear.value, currentMonth.value)
+}
+
+const handleBack = () => {
+  router.back()
 }
 
 const openFilterDialog = () => {
@@ -314,7 +311,6 @@ const displayDateLabel = computed(() => {
     // 정수 형식(yyyymmdd)에서 월과 일 추출
     const formatIntDate = (dateInt) => {
       const dateStr = String(dateInt)
-      // 월은 5-6번째 자리, 일은 7-8번째 자리
       const month = dateStr.substring(4, 6)
       const day = dateStr.substring(6, 8)
       return `${parseInt(month)}.${parseInt(day)}`
@@ -380,3 +376,15 @@ const isFiltered = computed(() => {
   )
 })
 </script>
+
+<style scoped>
+.shadow-custom {
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.15); /* 위쪽에 그림자가 더 많이 보이도록 설정 */
+}
+/* 현재 페이지 네모박스 색상 변경 */
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+  background-color: #6aa25a;
+  color: white;
+  border-color: #6aa25a;
+}
+</style>
