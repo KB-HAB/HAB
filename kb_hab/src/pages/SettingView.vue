@@ -26,7 +26,7 @@
       >
         <div class="flex items-center gap-3">
           <Trash2 />
-          내 데이터 삭제
+          거래 내역 초기화
         </div>
       </button>
 
