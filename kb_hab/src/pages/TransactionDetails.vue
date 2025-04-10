@@ -1,10 +1,8 @@
 <template>
-  <div class="p-4">
-    <!-- Header: 뒤로가기 버튼 -->
-    <GoBackHeaderLayout :title="''" @goBack="handleBack" />
-
+  <GoBackHeaderLayout />
+  <div class="p-8">
     <!-- Body: 입력 폼 -->
-    <div class="mt-6 space-y-6">
+    <div class="space-y-6">
       <!-- 날짜 선택 -->
       <div>
         <label class="text-base font-bold flex items-center mb-3">날짜</label>

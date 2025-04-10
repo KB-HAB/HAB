@@ -1,6 +1,6 @@
 <template>
   <GoBackHeaderLayout :title="''" @goBack="handleBack" />
-  <div class="p-4">
+  <div class="p-8">
     <div class="bg-white p-4 rounded-2xl shadow-custom space-y-3 m-4">
       <!-- 년.월 + <> 버튼 -->
       <div class="p-2.5 flex items-center gap-1">
@@ -102,7 +102,6 @@
       </div>
     </div>
   </div>
-  <NavBar />
 
   <el-dialog
     v-model="isFilterOpen"

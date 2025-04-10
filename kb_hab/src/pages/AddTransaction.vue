@@ -1,9 +1,6 @@
 <template>
-  <div class="p-4">
-    <!-- Header: 뒤로가기 버튼 -->
-    <GoBackHeaderLayout :title="''" @goBack="handleBack" />
-
-    <div class="mt-6 space-y-6">
+  <div class="p-8">
+    <div class="space-y-6">
       <!-- 날짜 선택 -->
       <div>
         <label class="text-base font-bold flex items-center mb-3"

@@ -1,37 +1,38 @@
 <template>
-  <div class="min-h-screen p-4 flex flex-col">
+  <div class="flex flex-col h-full">
     <GoBackHeaderLayout title="월 예산 설정" />
+    <div class="h-full p-8 flex flex-col">
+      <main class="flex-1 flex flex-col justify-between">
+        <div class="p-4">
+          <span class="mb-2">수정할 금액을 입력해주세요 </span><PriceInput v-model="budget" />
+        </div>
 
-    <main class="flex-1 flex flex-col justify-between">
-      <div class="p-4">
-        <span class="mb-2">수정할 금액을 입력해주세요 </span><PriceInput v-model="budget" />
-      </div>
+        <div class="flex justify-between mt-10 gap-4">
+          <CommonButton variant="white" :onClick="goBack" class="w-full justify-center">
+            취소
+          </CommonButton>
+          <CommonButton variant="black" :onClick="openSaveDialog" class="w-full justify-center">
+            <Pencil class="w-4 h-4" />
+            저장하기
+          </CommonButton>
+        </div>
+      </main>
 
-      <div class="flex justify-between mt-10 gap-4">
-        <CommonButton variant="white" :onClick="goBack" class="w-full justify-center">
-          취소
-        </CommonButton>
-        <CommonButton variant="black" :onClick="openSaveDialog" class="w-full justify-center">
-          <Pencil class="w-4 h-4" />
-          저장하기
-        </CommonButton>
-      </div>
-    </main>
-
-    <el-dialog v-model="openDialog" title="저장 확인" width="300px">
-      <span>예산을 저장하시겠습니까?</span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="openDialog = false">취소</el-button>
-          <el-button
-            @click="confirmSave"
-            style="background-color: #6aa25a; color: white; border: none"
-          >
-            저장
-          </el-button>
-        </span>
-      </template>
-    </el-dialog>
+      <el-dialog v-model="openDialog" title="저장 확인" width="300px">
+        <span>예산을 저장하시겠습니까?</span>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="openDialog = false">취소</el-button>
+            <el-button
+              @click="confirmSave"
+              style="background-color: #6aa25a; color: white; border: none"
+            >
+              저장
+            </el-button>
+          </span>
+        </template>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
