@@ -90,7 +90,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="openDeleteDialog = false">취소</el-button>
-          <el-button type="danger" @click="confirmDelete">예</el-button>
+          <el-button type="danger" @click="confirmDelete" :style="{ backgroundColor: '#6AA25A', borderColor: '#6AA25A'}">예</el-button>
         </span>
       </template>
     </el-dialog>
@@ -101,7 +101,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="openSaveDialog = false">취소</el-button>
-          <el-button type="primary" @click="confirmSave">예</el-button>
+          <el-button type="primary" @click="confirmSave" :style="{ backgroundColor: '#6AA25A', borderColor: '#6AA25A'}">예</el-button>
         </span>
       </template>
     </el-dialog>
@@ -119,7 +119,8 @@ import TwoButtonSelect from '@/components/Transaction/TwoButtonSelect.vue'
 import CommonButton from '@/components/common/CommonButton.vue'
 import CategoryButton from '@/components/common/CategoryButton.vue'
 
-import { dummyTransactions } from '@/data/transactions.js'
+// import { dummyTransactions } from '@/data/transactions.js'
+import { useTransactionStoreAdapter } from '@/stores/transactionStoreAdapter'
 
 const router = useRouter()
 const route = useRoute()
@@ -134,22 +135,35 @@ const transaction = reactive({
   category: '',
 })
 
-// axios 통해서 데이터 가져오기 GET /transactions/:id
-onMounted(() => {
-  const transactionId = route.params.id
-  const foundTransaction = dummyTransactions.value.find((tx) => tx.id === Number(transactionId))
+const { getTransaction, deleteTransaction, editTransaction } = useTransactionStoreAdapter();
 
-  if (foundTransaction) {
+// 값 초기화
+const fetchTransaction = async () => {
+  const transactionId = route.params.id
+
+  try{
+    const foundTransaction = await getTransaction(transactionId)
+    console.log(foundTransaction);
+
+    if (foundTransaction) {
     transaction.date = foundTransaction.date
     transaction.name = foundTransaction.title
     transaction.memo = foundTransaction.memo || ''
     transaction.amount = foundTransaction.amount
     transaction.type = foundTransaction.type
     transaction.category = foundTransaction.category
+    }
 
     // 깊은 복사를 통해 초기값을 설정
     initialTransaction.value = JSON.parse(JSON.stringify(transaction))
+  } catch (error) {
+    console.log(error);
   }
+}
+
+// 조회
+onMounted(() => {
+  fetchTransaction();
 })
 
 // 뒤로 가기 핸들러
@@ -186,18 +200,35 @@ const openDeleteDialog = ref(false)
 const openSaveDialog = ref(false)
 
 // 삭제 확인 후 처리 함수
-const confirmDelete = () => {
+const confirmDelete = async () => {
   openDeleteDialog.value = false
-  alert('삭제되었습니다.')
-  router.push('/transactions')
+  const transactionId = route.params.id
+
+  try {
+    await deleteTransaction(transactionId)
+    router.back()
+  } catch (error) {
+    console.log("삭제 실패 : ", error)
+  }
 }
 
 // 수정 확인 후 처리 함수
-const confirmSave = () => {
+const confirmSave = async() => {
   openSaveDialog.value = false
-  // 수정 확인용
-  console.log('Modified Transaction Data: ', transaction)
-  alert('수정되었습니다.')
+  const transactionId =route.params.id
+
+  try {
+    await editTransaction(transactionId)
+
+    // 수정 확인용
+    console.log('Modified Transaction Data: ', transaction)
+
+    // 새로고침
+    router.go(0)
+    window.scrollTo(0, 0);
+  } catch (error) {
+    console.log("수정 실패 : ", error)
+  }
 }
 
 // 카테고리 선택 업데이트 함수
