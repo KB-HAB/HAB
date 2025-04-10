@@ -46,7 +46,7 @@ const formattedValue = ref('')
 watch(
   () => props.modelValue,
   (val) => {
-    formattedValue.value = val === 0 ? '' : formatNumber(val)
+    formattedValue.value = formatNumber(val)
   },
   { immediate: true },
 )
@@ -70,5 +70,12 @@ const handleInput = (e) => {
 
 //   return `${mValue.toFixed(0)}만원`
 // })
-//
+
+// ✅ placeholder 문구 자동 생성
+const placeholderText = computed(() => {
+  if (props.modelValue && props.modelValue > 0) {
+    return `${formatNumber(props.modelValue)}원`
+  }
+  return '0원'
+})
 </script>
