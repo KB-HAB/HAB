@@ -102,7 +102,6 @@
       </div>
     </div>
   </div>
-  <NavBar />
 
   <el-dialog
     v-model="isFilterOpen"
