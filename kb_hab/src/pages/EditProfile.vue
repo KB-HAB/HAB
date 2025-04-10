@@ -1,25 +1,26 @@
 <template>
-  <div class="min-h-screen p-4 flex flex-col">
+  <div class="h-full flex flex-col">
     <GoBackHeaderLayout title="프로필 수정" />
+    <div class="h-full p-8 flex flex-col">
+      <!-- 본문 영역 -->
+      <main class="flex-1 flex flex-col gap-6">
+        <!-- 닉네임 필드 -->
+        <NicknameInput v-model="nickname" />
 
-    <!-- 본문 영역 -->
-    <main class="flex-1 flex flex-col gap-6">
-      <!-- 닉네임 필드 -->
-      <NicknameInput v-model="nickname" />
+        <!-- 이메일 필드 -->
+        <EmailInput v-model="email" />
+      </main>
 
-      <!-- 이메일 필드 -->
-      <EmailInput v-model="email" />
-    </main>
-
-    <!-- Footer 버튼 영역 -->
-    <footer class="flex justify-between mt-6 gap-4">
-      <CommonButton variant="white" :onClick="cancelEdit" class="w-full justify-center">
-        취소
-      </CommonButton>
-      <CommonButton variant="black" :onClick="saveEdit" class="w-full justify-center">
-        저장하기
-      </CommonButton>
-    </footer>
+      <!-- Footer 버튼 영역 -->
+      <footer class="flex justify-between mt-6 gap-4">
+        <CommonButton variant="white" :onClick="cancelEdit" class="w-full justify-center">
+          취소
+        </CommonButton>
+        <CommonButton variant="black" :onClick="saveEdit" class="w-full justify-center">
+          저장하기
+        </CommonButton>
+      </footer>
+    </div>
   </div>
 </template>
 
