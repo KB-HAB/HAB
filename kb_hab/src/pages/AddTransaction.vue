@@ -6,7 +6,7 @@
     <div class="mt-6 space-y-6">
       <!-- 날짜 선택 -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">날짜</label>
+        <label class="text-base font-bold flex items-center mb-3">날짜 <span class="text-neutral-500 ml-1">*</span></label>
         <el-date-picker
           v-model="transaction.date"
           type="date"
@@ -17,7 +17,7 @@
 
       <!-- 거래 이름 입력 -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">거래 이름</label>
+        <label class="text-base font-bold flex items-center mb-3">거래 이름 <span class="text-neutral-500 ml-1">*</span></label>
         <InputWithLength
           v-model="transaction.name"
           placeholder="거래 이름을 입력하세요"
@@ -28,7 +28,7 @@
 
       <!-- 메모 입력 -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">메모</label>
+        <label class="text-base font-bold flex items-center mb-3">메모 </label>
         <InputWithLength
           v-model="transaction.memo"
           placeholder="메모를 입력하세요"
@@ -39,18 +39,18 @@
 
       <!-- 가격 입력 -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">가격(원)</label>
+        <label class="text-base font-bold flex items-center mb-3">가격(원) <span class="text-neutral-500 ml-1">*</span></label>
         <PriceInput v-model="transaction.amount" placeholder="가격을 입력하세요" class="w-full" />
       </div>
 
       <!-- 거래 구분 선택 (수입 / 지출) -->
       <div>
-        <label class="text-base font-bold flex items-center mb-3">구별</label>
+        <label class="text-base font-bold flex items-center mb-3">구별 <span class="text-neutral-500 ml-1">*</span></label>
         <TwoButtonSelect v-model="transaction.type" :leftOption="'수입'" :rightOption="'지출'" />
       </div>
 
       <!-- 카테고리 선택 -->
-      <label class="text-base font-bold flex items-center mb-3">카테고리</label>
+      <label class="text-base font-bold flex items-center mb-3">카테고리 <span class="text-neutral-500 ml-1">*</span></label>
       <div class="flex flex-wrap gap-2">
         <CategoryButton
           v-for="id in 17"
@@ -125,7 +125,6 @@ const canSave = computed(() => {
   return (
     (transaction.date || '').trim() !== '' &&
     transaction.name.trim() !== '' &&
-    transaction.memo.trim() !== '' &&
     transaction.amount > 0 &&
     transaction.type.trim() !== '' &&
     transaction.category !== ''
