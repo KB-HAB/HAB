@@ -3,7 +3,7 @@
     {
       "id": "1",
       "nickname": "함부기온앤온",
-      "email": "3조짱짱@naver.comff",
+      "email": "3조짱짱@naver.com",
       "budgetMonthly": 400000
     }
   ],
@@ -19,6 +19,62 @@
     {
       "id": "3",
       "name": "월급"
+    },
+    {
+      "id": "4",
+      "name": "술·유흥"
+    },
+    {
+      "id": "5",
+      "name": "쇼핑"
+    },
+    {
+      "id": "6",
+      "name": "취미·여가"
+    },
+    {
+      "id": "7",
+      "name": "의료·건강·피트니스"
+    },
+    {
+      "id": "8",
+      "name": "주거·통신"
+    },
+    {
+      "id": "9",
+      "name": "보험·세금·기타금융"
+    },
+    {
+      "id": "10",
+      "name": "미용"
+    },
+    {
+      "id": "11",
+      "name": "교통"
+    },
+    {
+      "id": "12",
+      "name": "교육"
+    },
+    {
+      "id": "13",
+      "name": "생활"
+    },
+    {
+      "id": "14",
+      "name": "카테고리 없음"
+    },
+    {
+      "id": "15",
+      "name": "이체"
+    },
+    {
+      "id": "16",
+      "name": "급여"
+    },
+    {
+      "id": "17",
+      "name": "저축·투자"
     }
   ],
   "transactions": [
@@ -26,487 +82,388 @@
       "id": "1",
       "title": "월급",
       "memo": "3월 급여",
-      "amount": 2439791,
-      "date": 20250307,
+      "amount": 3000000,
+      "date": 20250411,
       "type": "INCOME",
-      "category_id": 3
+      "category_id": 20
     },
     {
       "id": "2",
-      "title": "저녁 식사",
-      "memo": "친구와 식사",
-      "amount": 20817,
-      "date": 20250313,
+      "title": "맥도날드",
+      "memo": "더블불고기버거 세트",
+      "amount": 10000,
+      "date": 20250410,
       "type": "EXPENDITURE",
       "category_id": 1
     },
     {
       "id": "3",
-      "title": "월급",
-      "memo": "1월 급여",
-      "amount": 2188983,
-      "date": 20250215,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "인프런 강의 구매",
+      "memo": "스프링 JPA 강의",
+      "amount": 88000,
+      "date": 20250409,
+      "type": "EXPENDITURE",
+      "category_id": 16
     },
     {
       "id": "4",
-      "title": "택시",
-      "memo": "퇴근길",
-      "amount": 14961,
-      "date": 20250211,
+      "title": "점심 식사",
+      "memo": "회사 근처 식당",
+      "amount": 11000,
+      "date": 20250325,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 1
     },
     {
       "id": "5",
-      "title": "월급",
-      "memo": "2월 급여",
-      "amount": 2220668,
-      "date": 20250108,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "지하철 요금",
+      "memo": "출근길 T-Money",
+      "amount": 1450,
+      "date": 20250406,
+      "type": "EXPENDITURE",
+      "category_id": 11
     },
     {
       "id": "6",
-      "title": "택시",
-      "memo": "야근 후 귀가",
-      "amount": 20767,
-      "date": 20250103,
+      "title": "편의점 쇼핑",
+      "memo": "야식 구매",
+      "amount": 7600,
+      "date": 20250328,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 5
     },
     {
       "id": "7",
-      "title": "월급",
-      "memo": "2월 급여",
-      "amount": 2125623,
-      "date": 20241222,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "넷플릭스 구독",
+      "memo": "4월 이용료",
+      "amount": 14500,
+      "date": 20250330,
+      "type": "EXPENDITURE",
+      "category_id": 6
     },
     {
       "id": "8",
-      "title": "지하철",
-      "memo": "야근 후 귀가",
-      "amount": 10013,
-      "date": 20250223,
+      "title": "병원 진료",
+      "memo": "감기 진료비",
+      "amount": 25000,
+      "date": 20250401,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 7
     },
     {
       "id": "9",
-      "title": "기타 지출",
-      "memo": "충동 구매",
-      "amount": 28917,
-      "date": 20250219,
+      "title": "아파트 관리비",
+      "memo": "4월 관리비",
+      "amount": 120000,
+      "date": 20250322,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 8
     },
     {
       "id": "10",
-      "title": "도서 구입",
-      "memo": "충동 구매",
-      "amount": 26749,
-      "date": 20250204,
+      "title": "자동차 보험",
+      "memo": "2분기 납부",
+      "amount": 220000,
+      "date": 20250407,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 9
     },
     {
       "id": "11",
-      "title": "택시",
-      "memo": "출근길",
-      "amount": 2659,
-      "date": 20241201,
+      "title": "이발소",
+      "memo": "머리 커트",
+      "amount": 15000,
+      "date": 20250408,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 10
     },
     {
       "id": "12",
-      "title": "도서 구입",
-      "memo": "자기계발",
-      "amount": 19202,
-      "date": 20250328,
+      "title": "버스요금",
+      "memo": "야근 후 귀가",
+      "amount": 1200,
+      "date": 20250329,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 11
     },
     {
       "id": "13",
-      "title": "술",
-      "memo": "스타벅스",
-      "amount": 9500,
-      "date": 20250106,
+      "title": "영어 학원",
+      "memo": "토익 수강료",
+      "amount": 180000,
+      "date": 20250407,
       "type": "EXPENDITURE",
-      "category_id": 1
+      "category_id": 12
     },
     {
       "id": "14",
-      "title": "기타 지출",
-      "memo": "자기계발",
-      "amount": 23175,
-      "date": 20250125,
+      "title": "마트 장보기",
+      "memo": "주말 장보기",
+      "amount": 87000,
+      "date": 20250330,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 13
     },
     {
       "id": "15",
-      "title": "월급",
-      "memo": "3월 급여",
-      "amount": 2324510,
-      "date": 20241219,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "수입이체",
+      "memo": "부모님 용돈",
+      "amount": 500000,
+      "date": 20250326,
+      "type": "EXPENDITURE",
+      "category_id": 15
     },
     {
       "id": "16",
-      "title": "버스비",
-      "memo": "퇴근길",
-      "amount": 14648,
-      "date": 20250215,
-      "type": "EXPENDITURE",
-      "category_id": 2
+      "title": "월급",
+      "memo": "4월 급여",
+      "amount": 3100000,
+      "date": 20250324,
+      "type": "INCOME",
+      "category_id": 16
     },
     {
       "id": "17",
-      "title": "도서 구입",
-      "memo": "지인 생일",
-      "amount": 12898,
-      "date": 20250101,
-      "type": "EXPENDITURE",
-      "category_id": 4
+      "title": "예금이자",
+      "memo": "정기예금 이자",
+      "amount": 2300,
+      "date": 20250323,
+      "type": "INCOME",
+      "category_id": 17
     },
     {
       "id": "18",
-      "title": "도서 구입",
-      "memo": "자기계발",
-      "amount": 9859,
-      "date": 20250301,
+      "title": "헬스장 등록",
+      "memo": "1개월 등록",
+      "amount": 70000,
+      "date": 20250325,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 7
     },
     {
       "id": "19",
-      "title": "지하철",
-      "memo": "출근길",
-      "amount": 16022,
-      "date": 20250303,
+      "title": "공과금 납부",
+      "memo": "전기세/수도세",
+      "amount": 95000,
+      "date": 20250408,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 8
     },
     {
       "id": "20",
-      "title": "택시",
-      "memo": "퇴근길",
-      "amount": 5444,
-      "date": 20250227,
+      "title": "토익 문제집",
+      "memo": "교재 구매",
+      "amount": 24000,
+      "date": 20250406,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 12
     },
     {
       "id": "21",
-      "title": "기타 지출",
-      "memo": "충동 구매",
-      "amount": 13935,
-      "date": 20250120,
+      "title": "게임 구매",
+      "memo": "Steam 할인",
+      "amount": 33000,
+      "date": 20250402,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 6
     },
     {
       "id": "22",
-      "title": "택시",
-      "memo": "야근 후 귀가",
-      "amount": 8410,
-      "date": 20250316,
+      "title": "스타벅스",
+      "memo": "카페라떼",
+      "amount": 4900,
+      "date": 20250328,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 1
     },
     {
       "id": "23",
-      "title": "기타 지출",
-      "memo": "충동 구매",
-      "amount": 12335,
-      "date": 20250115,
+      "title": "이체",
+      "memo": "친구에게 송금",
+      "amount": 30000,
+      "date": 20250329,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 15
     },
     {
       "id": "24",
-      "title": "월급",
-      "memo": "2월 급여",
-      "amount": 2299375,
-      "date": 20250111,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "편의점 간식",
+      "memo": "야근 후 초코우유랑 샌드위치",
+      "amount": 5800,
+      "date": 20250227,
+      "type": "EXPENDITURE",
+      "category_id": 1
     },
     {
       "id": "25",
-      "title": "월급",
-      "memo": "1월 급여",
-      "amount": 2433145,
-      "date": 20250404,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "지하철 요금",
+      "memo": "2월 마지막 주 출근",
+      "amount": 1450,
+      "date": 20250226,
+      "type": "EXPENDITURE",
+      "category_id": 11
     },
     {
       "id": "26",
-      "title": "월급",
-      "memo": "4월 급여",
-      "amount": 2288062,
-      "date": 20250303,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "쇼핑",
+      "memo": "유니클로 셔츠 할인",
+      "amount": 39000,
+      "date": 20250224,
+      "type": "EXPENDITURE",
+      "category_id": 5
     },
     {
       "id": "27",
-      "title": "월급",
-      "memo": "2월 급여",
-      "amount": 2079620,
-      "date": 20250224,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "병원 진료",
+      "memo": "피부과 진료",
+      "amount": 32000,
+      "date": 20250221,
+      "type": "EXPENDITURE",
+      "category_id": 7
     },
     {
       "id": "28",
-      "title": "버스비",
-      "memo": "야근 후 귀가",
-      "amount": 22964,
-      "date": 20250407,
+      "title": "아파트 관리비",
+      "memo": "2월 관리비",
+      "amount": 118000,
+      "date": 20250220,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 8
     },
     {
       "id": "29",
-      "title": "선물",
-      "memo": "자기계발",
-      "amount": 7396,
-      "date": 20241218,
+      "title": "넷플릭스 구독",
+      "memo": "2월 결제",
+      "amount": 14500,
+      "date": 20250218,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 6
     },
     {
       "id": "30",
-      "title": "기타 지출",
-      "memo": "자기계발",
-      "amount": 19980,
-      "date": 20250303,
-      "type": "EXPENDITURE",
-      "category_id": 4
+      "title": "월급",
+      "memo": "2월 급여",
+      "amount": 3050000,
+      "date": 20250225,
+      "type": "INCOME",
+      "category_id": 16
     },
     {
       "id": "31",
-      "title": "버스비",
-      "memo": "출근길",
-      "amount": 12607,
-      "date": 20250217,
+      "title": "카페",
+      "memo": "탐앤탐스 아이스 아메리카노",
+      "amount": 4500,
+      "date": 20250214,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 1
     },
     {
       "id": "32",
-      "title": "월급",
-      "memo": "1월 급여",
-      "amount": 2493843,
-      "date": 20250125,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "책 구매",
+      "memo": "개발 서적 2권",
+      "amount": 47000,
+      "date": 20250213,
+      "type": "EXPENDITURE",
+      "category_id": 12
     },
     {
       "id": "33",
-      "title": "저녁 식사",
-      "memo": "회식",
-      "amount": 17866,
-      "date": 20250122,
-      "type": "EXPENDITURE",
-      "category_id": 1
+      "title": "적금 이자",
+      "memo": "2월 이자 수익",
+      "amount": 2700,
+      "date": 20250210,
+      "type": "INCOME",
+      "category_id": 17
     },
     {
       "id": "34",
-      "title": "지하철",
-      "memo": "퇴근길",
-      "amount": 28279,
-      "date": 20250314,
-      "type": "EXPENDITURE",
-      "category_id": 2
-    },
-    {
-      "id": "35",
-      "title": "기타 지출",
-      "memo": "지인 생일",
-      "amount": 25729,
-      "date": 20250407,
-      "type": "EXPENDITURE",
-      "category_id": 4
-    },
-    {
-      "id": "36",
-      "title": "월급",
-      "memo": "3월 급여",
-      "amount": 2182703,
+      "title": "편의점 간식",
+      "memo": "컵라면과 삼각김밥",
+      "amount": 4700,
       "date": 20250129,
-      "type": "INCOME",
-      "category_id": 3
-    },
-    {
-      "id": "37",
-      "title": "기타 지출",
-      "memo": "충동 구매",
-      "amount": 2200,
-      "date": 20241209,
-      "type": "EXPENDITURE",
-      "category_id": 4
-    },
-    {
-      "id": "38",
-      "title": "도서 구입",
-      "memo": "충동 구매",
-      "amount": 6981,
-      "date": 20250117,
-      "type": "EXPENDITURE",
-      "category_id": 4
-    },
-    {
-      "id": "39",
-      "title": "카페",
-      "memo": "친구와 식사",
-      "amount": 2762,
-      "date": 20250111,
       "type": "EXPENDITURE",
       "category_id": 1
     },
     {
-      "id": "40",
-      "title": "택시",
-      "memo": "퇴근길",
-      "amount": 12054,
-      "date": 20250216,
+      "id": "35",
+      "title": "지하철 요금",
+      "memo": "정기권 충전",
+      "amount": 55000,
+      "date": 20250127,
       "type": "EXPENDITURE",
-      "category_id": 2
+      "category_id": 11
+    },
+    {
+      "id": "36",
+      "title": "이발소",
+      "memo": "설 연휴 전 커트",
+      "amount": 15000,
+      "date": 20250125,
+      "type": "EXPENDITURE",
+      "category_id": 10
+    },
+    {
+      "id": "37",
+      "title": "넷플릭스 구독",
+      "memo": "1월 구독료",
+      "amount": 14500,
+      "date": 20250118,
+      "type": "EXPENDITURE",
+      "category_id": 6
+    },
+    {
+      "id": "38",
+      "title": "병원 진료",
+      "memo": "치과 스케일링",
+      "amount": 60000,
+      "date": 20250120,
+      "type": "EXPENDITURE",
+      "category_id": 7
+    },
+    {
+      "id": "39",
+      "title": "마트 장보기",
+      "memo": "설날 음식 재료",
+      "amount": 102000,
+      "date": 20250122,
+      "type": "EXPENDITURE",
+      "category_id": 13
+    },
+    {
+      "id": "40",
+      "title": "월급",
+      "memo": "1월 급여",
+      "amount": 3000000,
+      "date": 20250125,
+      "type": "INCOME",
+      "category_id": 16
     },
     {
       "id": "41",
-      "title": "월급",
-      "memo": "3월 급여",
-      "amount": 2495941,
-      "date": 20250131,
-      "type": "INCOME",
-      "category_id": 3
+      "title": "토스 이체",
+      "memo": "조카 세뱃돈",
+      "amount": 100000,
+      "date": 20250123,
+      "type": "EXPENDITURE",
+      "category_id": 15
     },
     {
       "id": "42",
-      "title": "도서 구입",
-      "memo": "충동 구매",
-      "amount": 23106,
-      "date": 20241221,
+      "title": "저축",
+      "memo": "적금 납입",
+      "amount": 300000,
+      "date": 20250126,
       "type": "EXPENDITURE",
-      "category_id": 4
+      "category_id": 17
     },
     {
       "id": "43",
       "title": "카페",
-      "memo": "회식",
-      "amount": 8111,
-      "date": 20250326,
-      "type": "EXPENDITURE",
-      "category_id": 1
-    },
-    {
-      "id": "44",
-      "title": "저녁 식사",
-      "memo": "스타벅스",
-      "amount": 3387,
-      "date": 20250114,
-      "type": "EXPENDITURE",
-      "category_id": 1
-    },
-    {
-      "id": "45",
-      "title": "카페",
-      "memo": "회사 근처 식당",
-      "amount": 10293,
-      "date": 20241221,
-      "type": "EXPENDITURE",
-      "category_id": 1
-    },
-    {
-      "id": "46",
-      "title": "술",
-      "memo": "스타벅스",
-      "amount": 2738,
-      "date": 20250203,
-      "type": "EXPENDITURE",
-      "category_id": 1
-    },
-    {
-      "id": "47",
-      "title": "월급",
-      "memo": "3월 급여",
-      "amount": 2426709,
-      "date": 20250311,
-      "type": "INCOME",
-      "category_id": 3
-    },
-    {
-      "id": "48",
-      "title": "택시",
-      "memo": "야근 후 귀가",
-      "amount": 20472,
-      "date": 20250106,
+      "memo": "스타벅스 설날 한정 음료",
+      "amount": 5900,
+      "date": 20250119,
       "type": "EXPENDITURE",
       "category_id": 2
-    },
-    {
-      "id": "49",
-      "title": "점심 식사",
-      "memo": "친구와 식사",
-      "amount": 1252,
-      "date": 20250130,
-      "type": "EXPENDITURE",
-      "category_id": 1
-    },
-    {
-      "id": "50",
-      "title": "점심 식사",
-      "memo": "회사 근처 식당",
-      "amount": 21204,
-      "date": 20241204,
-      "type": "EXPENDITURE",
-      "category_id": 1
-    },
-    {
-      "id": "51",
-      "title": "돈 주세용",
-      "memo": "깁미머니",
-      "amount": 4000000,
-      "date": 20250410,
-      "type": "INCOME",
-      "category_id": 16
-    },
-    {
-      "id": "52",
-      "title": "쇼핑",
-      "memo": "텅장이되",
-      "amount": 2000000,
-      "date": 20250408,
-      "type": "EXPENDITURE",
-      "category_id": 15
-    },
-    {
-      "id": "53",
-      "title": "깁미머니",
-      "memo": "깁미머니",
-      "amount": 3500000,
-      "date": 20250407,
-      "type": "INCOME",
-      "category_id": 16
-    },
-    {
-      "id": "54",
-      "title": "쇼핑",
-      "memo": "텅장이되",
-      "amount": 2500000,
-      "date": 20250409,
-      "type": "EXPENDITURE",
-      "category_id": 15
     }
   ]
 }
